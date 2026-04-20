@@ -1,0 +1,118 @@
+/* frontend/src/pages/Login.css */
+.login-page {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* CÔTÉ GAUCHE - Rouge décoratif */
+.login-gauche {
+  width: 45%;
+  background: linear-gradient(160deg, #1A1A2E 0%, #2D0A0E 50%, var(--rouge) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+.login-deco {
+  text-align: center;
+  color: white;
+  position: relative;
+  z-index: 2;
+}
+.logo-login {
+  width: 90px; height: 90px;
+  background: white;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--rouge); font-weight: 900; font-size: 42px;
+  font-family: 'Cairo', sans-serif;
+  margin: 0 auto 20px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+}
+.login-deco h1 {
+  font-family: 'Cairo', sans-serif;
+  font-size: 42px; font-weight: 900;
+  letter-spacing: 6px;
+  margin-bottom: 8px;
+}
+.login-deco p { font-size: 16px; opacity: 0.8; letter-spacing: 2px; }
+
+.deco-cercles { position: absolute; top: -50%; left: -50%; pointer-events: none; }
+.dc { border-radius: 50%; border: 1px solid rgba(255,255,255,0.1); position: absolute; }
+.dc.c1 { width: 600px; height: 600px; }
+.dc.c2 { width: 900px; height: 900px; top: -150px; left: -150px; }
+
+/* CÔTÉ DROIT - Formulaire */
+.login-droite {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  padding: 40px;
+}
+.login-form-wrapper {
+  width: 100%;
+  max-width: 400px;
+}
+.login-form-wrapper h2 {
+  font-family: 'Cairo', sans-serif;
+  font-size: 30px; font-weight: 700;
+  margin-bottom: 6px;
+  color: var(--texte);
+}
+.login-sous-titre {
+  color: var(--texte-clair);
+  margin-bottom: 28px;
+  font-size: 15px;
+}
+
+.input-otp {
+  font-size: 28px !important;
+  font-weight: 700 !important;
+  letter-spacing: 12px !important;
+  text-align: center !important;
+  color: var(--rouge) !important;
+}
+
+.forgot-password-link {
+  font-size: 13.5px;
+  color: var(--texte-clair);
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  display: inline-block;
+  padding: 2px 4px;
+}
+.forgot-password-link:hover {
+  color: var(--rouge);
+  text-decoration: none;
+  transform: translateX(3px);
+}
+
+.otp-icone { font-size: 48px; margin-bottom: 12px; }
+
+.login-footer {
+  text-align: center;
+  margin-top: 24px;
+  font-size: 14px;
+  color: var(--texte-clair);
+}
+.login-footer a { color: var(--rouge); font-weight: 600; text-decoration: none; }
+
+.btn-retour {
+  background: none; border: none;
+  color: var(--rouge); font-weight: 600;
+  cursor: pointer; font-size: 14px;
+  margin-top: 16px;
+  font-family: 'Exo 2', sans-serif;
+  display: block;
+}
+.btn-retour:hover { text-decoration: underline; }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .login-gauche { display: none; }
+  .login-droite { padding: 24px; }
+}
