@@ -185,7 +185,11 @@ exports.resetPassword = (req, res) => {
 
 exports.logout = (req, res) => {
   const { userId, reason } = req.body;
+  if (!userId) return res.json({ message: 'Logout sans log (pas d\'ID)' });
+
   const action = reason || 'logout';
-  db.query('INSERT INTO access_logs (user_id, action) VALUES (?, ?)', [userId, action]);
-  res.json({ message: 'Déconnexion enregistrée' });
+  db.query('INSERT INTO access_logs (user_id, action) VALUES (?, ?)', [userId, action], (err) => {
+    if (err) console.error('Erreur log déconnexion:', err.message);
+    res.json({ message: 'Déconnexion enregistrée' });
+  });
 };

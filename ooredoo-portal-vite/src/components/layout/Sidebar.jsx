@@ -1,13 +1,30 @@
 import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { useLanguage } from '../../context/LanguageContext';
 import { usePWA } from '../../hooks/usePWA';
 import './Sidebar.css';
 
 export default function Sidebar({ isOpen }) {
   const { user, deconnecter } = useAuth();
+  const { t } = useLanguage();
   const navigate = useNavigate();
   const { isInstallable, installApp } = usePWA();
+  const [nbAttente, setNbAttente] = React.useState(0);
+
+  React.useEffect(() => {
+    if (user?.role === 'admin') {
+      fetchNbAttente();
+    }
+  }, [user]);
+
+  const fetchNbAttente = async () => {
+    try {
+      const res = await api.get('/users');
+      const count = res.data.filter(u => u.statut === 'en_attente').length;
+      setNbAttente(count);
+    } catch (e) {}
+  };
 
   if (!user) return null;
 
@@ -32,7 +49,15 @@ export default function Sidebar({ isOpen }) {
           className={({ isActive }) => isActive ? "sidebar-link active" : "sidebar-link"}
         >
           <span className="icon">📊</span>
-          <span>Tableau de bord</span>
+          <span>{t('dashboard')}</span>
+        </NavLink>
+
+        <NavLink
+          to="/alertes"
+          className={({ isActive }) => isActive ? "sidebar-link active" : "sidebar-link"}
+        >
+          <span className="icon">🚨</span>
+          <span>Alertes &amp; Relances</span>
         </NavLink>
 
         {user.role === 'admin' && (
@@ -42,7 +67,8 @@ export default function Sidebar({ isOpen }) {
               className={({ isActive }) => isActive ? "sidebar-link active" : "sidebar-link"}
             >
               <span className="icon">👥</span>
-              <span>Utilisateurs</span>
+              <span>{t('utilisateurs')}</span>
+              {nbAttente > 0 && <span className="badge-notif-side">{nbAttente}</span>}
             </NavLink>
 
             <NavLink
@@ -50,28 +76,36 @@ export default function Sidebar({ isOpen }) {
               className={({ isActive }) => isActive ? "sidebar-link active" : "sidebar-link"}
             >
               <span className="icon">📜</span>
-              <span>Journalisation</span>
+              <span>{t('journalisation')}</span>
             </NavLink>
           </>
         )}
 
         <button className="sidebar-link sidebar-install-btn" onClick={handleInstall}>
           <span className="icon">📱</span>
-          <span>Installer l'app</span>
+          <span>{t('installer')}</span>
         </button>
+
+        <NavLink
+          to={`/profil/${user.id}`}
+          className={({ isActive }) => isActive ? "sidebar-link active" : "sidebar-link"}
+        >
+          <span className="icon">👤</span>
+          <span>{t('profil')}</span>
+        </NavLink>
 
         <NavLink
           to="/parametres"
           className={({ isActive }) => isActive ? "sidebar-link active" : "sidebar-link"}
         >
           <span className="icon">⚙️</span>
-          <span>Paramètres</span>
+          <span>{t('parametres')}</span>
         </NavLink>
       </div>
 
       <div className="sidebar-footer">
         <button className="btn-deconnexion-side" onClick={handleDeconnexion}>
-          Déconnexion
+          {t('deconnexion')}
         </button>
       </div>
     </aside>

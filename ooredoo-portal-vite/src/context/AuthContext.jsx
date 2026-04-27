@@ -37,7 +37,7 @@ export function AuthProvider({ children }) {
   async function deconnecter(reason = 'logout') {
     if (user) {
       try {
-        await fetch('http://localhost:5000/api/auth/logout', {
+        await fetch('/api/auth/logout', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ userId: user.id, reason })

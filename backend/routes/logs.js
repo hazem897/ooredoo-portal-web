@@ -18,4 +18,20 @@ router.get('/', (req, res) => {
   });
 });
 
+// Récupérer l'historique d'un utilisateur spécifique
+router.get('/user/:id', (req, res) => {
+  const query = `
+    SELECT id, action, cree_le
+    FROM access_logs
+    WHERE user_id = ?
+    ORDER BY cree_le DESC
+    LIMIT 20
+  `;
+
+  db.query(query, [req.params.id], (err, rows) => {
+    if (err) return res.status(500).json({ message: 'Erreur serveur SQL' });
+    res.json(rows);
+  });
+});
+
 module.exports = router;

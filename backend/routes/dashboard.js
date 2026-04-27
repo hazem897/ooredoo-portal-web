@@ -35,7 +35,7 @@ router.get('/stats', verifierToken, async (req, res) => {
     // 1. Compteurs globaux (KPIs)
     let kpis = {};
     try {
-      kpis = (await queryAsync(`
+      const ticketsKpis = (await queryAsync(`
         SELECT
           COUNT(*) AS total,
           COALESCE(SUM(type_ticket = 'activation'), 0) AS activations,
@@ -45,6 +45,14 @@ router.get('/stats', verifierToken, async (req, res) => {
           COALESCE(SUM(statut = 'ouvert' OR statut = 'en_cours'), 0) AS en_cours
         FROM tickets ${filtreZoneWhere}
       `, [...zoneParam]))[0];
+
+      let usersEnAttente = 0;
+      if (isAdmin) {
+        const usersRes = await queryAsync(`SELECT COUNT(*) AS count FROM users WHERE statut = 'en_attente'`);
+        usersEnAttente = usersRes[0].count;
+      }
+
+      kpis = { ...ticketsKpis, utilisateurs_en_attente: usersEnAttente };
     } catch (e) { console.error('❌ Erreur KPIs:', e.message); throw e; }
 
     // 2. SLA

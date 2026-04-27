@@ -15,9 +15,18 @@ CREATE TABLE users (
   role ENUM('admin','zone_manager','manager') NOT NULL,
   zone VARCHAR(100),                         -- ex: Tunis Nord, Sfax...
   statut ENUM('en_attente','approuve','refuse') DEFAULT 'en_attente',
+  photo_url VARCHAR(255),                    -- URL de la photo de profil
   otp_code VARCHAR(6),                       -- code OTP temporaire
   otp_expire DATETIME,                       -- expiration OTP
   cree_le DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+-- TABLE JOURNALISATION (Accès et Actions)
+CREATE TABLE IF NOT EXISTS access_logs (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  action VARCHAR(255) NOT NULL,
+  cree_le DATETIME DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
 -- TABLE PRINCIPALE : TICKETS (activation + plainte + résiliation)

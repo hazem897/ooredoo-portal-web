@@ -113,10 +113,10 @@ router.put('/:id', verifierToken, (req, res) => {
     return res.status(403).json({ message: 'Accès refusé' });
   }
 
-  const { nom, prenom, email } = req.body;
+  const { nom, prenom, email, zone } = req.body;
   db.query(
-    'UPDATE users SET nom = ?, prenom = ?, email = ? WHERE id = ?',
-    [nom, prenom, email, req.params.id],
+    'UPDATE users SET nom = ?, prenom = ?, email = ?, zone = ? WHERE id = ?',
+    [nom, prenom, email, zone, req.params.id],
     (err) => {
       if (err) return res.status(500).json({ message: 'Erreur SQL' });
       res.json({ message: 'Profil mis à jour' });

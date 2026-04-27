@@ -3,7 +3,8 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
-require('dotenv').config();
+const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '.env') });
 const cronScheduler = require('./cronScheduler');
 const db = require('./config/db');
 
@@ -38,7 +39,6 @@ app.use(express.json());
 app.use(require('./middleware/logger'));
 
 // Servir les photos de profil
-const path = require('path');
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Routes
@@ -46,6 +46,8 @@ app.use('/api/auth', require('./routes/auth'));
 app.use('/api/users', require('./routes/users'));
 app.use('/api/dashboard', require('./routes/dashboard'));
 app.use('/api/logs', require('./routes/logs'));
+app.use('/api/alertes', require('./routes/alertes'));
+app.use('/api/tickets', require('./routes/tickets'));
 
 // Initialisation des tâches planifiées (Cron)
 cronScheduler.init();
@@ -74,13 +76,13 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`🚀 Serveur démarré sur le port ${PORT}`);
   // Log du démarrage
-  db.query('INSERT INTO access_logs (user_id, action) VALUES (1, "Démarrage du serveur")');
+  db.query('INSERT INTO access_logs (user_id, action) VALUES (1, "login")');
 });
 
 // LOG ARRÊT DU SERVEUR
 function logStopAndExit() {
   console.log('🛑 Arrêt du serveur...');
-  db.query('INSERT INTO access_logs (user_id, action) VALUES (1, "Arrêt du serveur")', () => {
+  db.query('INSERT INTO access_logs (user_id, action) VALUES (1, "logout")', () => {
     process.exit(0);
   });
   // Sécurité si la DB ne répond pas

@@ -1,6 +1,7 @@
 // backend/config/db.js
 const mysql = require('mysql2');
-require('dotenv').config();
+const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '../.env') });
 
 // Utiliser un pool de connexions pour la reconnexion automatique
 const pool = mysql.createPool({

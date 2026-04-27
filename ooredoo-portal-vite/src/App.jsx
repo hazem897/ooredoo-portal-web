@@ -19,6 +19,7 @@ import Utilisateurs from './pages/Utilisateurs/Utilisateurs';
 import Journalisation from './pages/Journalisation/Journalisation';
 import Profil from './pages/Profil/Profil';
 import Themes from './pages/Themes/Themes';
+import Alertes from './pages/Alertes/Alertes';
 
 import './index.css';
 
@@ -86,6 +87,14 @@ function App() {
             <RouteProtegee>
               <MainLayout>
                 <Themes />
+              </MainLayout>
+            </RouteProtegee>
+          } />
+
+          <Route path="/alertes" element={
+            <RouteProtegee>
+              <MainLayout>
+                <Alertes />
               </MainLayout>
             </RouteProtegee>
           } />

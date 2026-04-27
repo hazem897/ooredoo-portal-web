@@ -1,5 +1,6 @@
 // frontend/src/pages/Dashboard.jsx
 import React, { useEffect, useState, useCallback, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
   LineChart, Line, PieChart, Pie, Cell
@@ -17,6 +18,7 @@ const PIE_COLORS = ['#E30613', '#F97316', '#2563EB', '#1A8A4E', '#9333EA'];
 function Dashboard() {
   const { user } = useAuth();
   const { t } = useLanguage();
+  const navigate = useNavigate();
   const [vue, setVue] = useState('synthese'); // 'synthese' ou 'powerbi'
   const [stats, setStats] = useState(null);
   const [tickets, setTickets] = useState([]);
@@ -99,7 +101,7 @@ function Dashboard() {
   }, [chargerStats, chargerTickets]);
 
   if (chargement) return <div className="chargement"><div className="spinner"></div><p>Chargement...</p></div>;
-  if (erreur) return <div className="erreur-msg" style={{color: 'red', textAlign: 'center', padding: '50px'}}>{erreur}</div>;
+  if (erreur) return <div className="erreur-msg" style={{ color: 'red', textAlign: 'center', padding: '50px' }}>{erreur}</div>;
   if (!stats) return <div className="erreur-msg">Données introuvables</div>;
 
   let kpis, parZone;
@@ -121,6 +123,14 @@ function Dashboard() {
         </div>
       </div>
 
+      {user?.role === 'admin' && stats?.kpis?.utilisateurs_en_attente > 0 && (
+        <div className="alert-box animated pulse" onClick={() => navigate('/utilisateurs')}>
+          <span className="icon">🔔</span>
+          <p>Vous avez <strong>{stats.kpis.utilisateurs_en_attente}</strong> demandes de création de compte en attente d'approbation.</p>
+          <button className="btn-small">{t('voir')}</button>
+        </div>
+      )}
+
       <div className="dash-tabs">
         <button className={`tab-btn ${vue === 'synthese' ? 'active' : ''}`} onClick={() => setVue('synthese')}>
           🏠 {t('synthese_native')}
@@ -133,10 +143,10 @@ function Dashboard() {
       {vue === 'powerbi' ? (
         <div className="powerbi-wrapper animated fadeIn">
           <div className="iframe-container card">
-            <iframe 
-              title="Ooredoo Power BI" 
-              width="100%" height="100%" 
-              src="https://playground.powerbi.com/sampleReportEmbed" 
+            <iframe
+              title="Ooredoo Power BI"
+              width="100%" height="100%"
+              src="https://playground.powerbi.com/sampleReportEmbed"
               frameBorder="0" allowFullScreen={true}
             ></iframe>
           </div>
@@ -220,19 +230,20 @@ function Dashboard() {
                   </tr>
                 </thead>
                 <tbody>
-                  {Array.isArray(tickets) && tickets.map(t => (
-                    <tr key={t.id}>
-                      <td>#{t.id}</td>
-                      <td>{t.type_ticket}</td>
-                      <td>{t.client_nom}</td>
-                      <td>{t.zone}</td>
-                      <td>{t.statut}</td>
-                      <td>{new Date(t.date_creation).toLocaleDateString()}</td>
-                    </tr>
-                  ))}
+                  {Array.isArray(tickets) && tickets.map(ticket => (
+                      <tr key={ticket.id}>
+                        <td>#{ticket.id}</td>
+                        <td>{ticket.type_ticket}</td>
+                        <td>{ticket.client_nom}</td>
+                        <td>{ticket.zone}</td>
+                        <td>{ticket.statut}</td>
+                        <td>{new Date(ticket.date_creation).toLocaleDateString()}</td>
+                      </tr>
+                    ))
+                  }
                 </tbody>
               </table>
-              {(!tickets || tickets.length === 0) && <p style={{textAlign:'center', padding: '20px'}}>{t('aucun_ticket')}</p>}
+              {(!tickets || tickets.length === 0) && <p style={{ textAlign: 'center', padding: '20px' }}>{t('aucun_ticket')}</p>}
             </div>
           </div>
         </>

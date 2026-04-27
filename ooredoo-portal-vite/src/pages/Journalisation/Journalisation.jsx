@@ -75,7 +75,10 @@ export default function Journalisation() {
 
     filteredLogs.forEach(log => {
       const date = new Date(log.cree_le).toLocaleString(lang === 'ar' ? 'ar-TN' : 'fr-FR');
-      const action = log.action === 'login' ? t('connexion') : t('deconnexion');
+      let action = log.action;
+      if (log.action === 'login') action = t('connexion');
+      if (log.action === 'logout') action = t('deconnexion');
+      
       const user = `${log.prenom} ${log.nom}`;
       tableRows.push([date, user, log.role.replace('_', ' '), action]);
     });
@@ -97,7 +100,10 @@ export default function Journalisation() {
 
     const rows = filteredLogs.map(log => {
       const date = new Date(log.cree_le).toLocaleString('fr-FR');
-      const action = log.action === 'login' ? 'Connexion' : 'Déconnexion';
+      let action = log.action;
+      if (log.action === 'login') action = 'Connexion';
+      if (log.action === 'logout') action = 'Déconnexion';
+      
       const user = `${log.prenom} ${log.nom}`;
       // Échapper les guillemets et entourer de guillemets
       return `"${date}","${user}","${log.role.replace('_', ' ')}","${action}"`;
@@ -120,7 +126,10 @@ export default function Journalisation() {
     const headers = ["Date et Heure", "Utilisateur", "Rôle", "Action"];
     const rows = filteredLogs.map(log => {
       const date = new Date(log.cree_le).toLocaleString('fr-FR');
-      const action = log.action === 'login' ? 'Connexion' : 'Déconnexion';
+      let action = log.action;
+      if (log.action === 'login') action = 'Connexion';
+      if (log.action === 'logout') action = 'Déconnexion';
+
       const user = `${log.prenom} ${log.nom}`;
       return [date, user, log.role.replace('_', ' '), action];
     });
@@ -189,7 +198,7 @@ export default function Journalisation() {
                 <th>{t('date_heure')}</th>
                 <th>{t('utilisateurs')}</th>
                 <th>{t('col_role') || "Rôle"}</th>
-                <th>{t('col_statut') || "Action"}</th>
+                <th>{t('col_action') || "Action"}</th>
               </tr>
             </thead>
             <tbody>
@@ -202,8 +211,8 @@ export default function Journalisation() {
                   </td>
                   <td><span className={`badge badge-role ${log.role}`}>{log.role.replace('_', ' ')}</span></td>
                   <td>
-                    <span className={`badge ${log.action === 'login' ? 'badge-vert' : 'badge-rouge'}`}>
-                      {log.action === 'login' ? t('connexion') : t('deconnexion')}
+                    <span className={`badge ${log.action === 'login' ? 'badge-vert' : (log.action === 'logout' ? 'badge-rouge' : 'badge-bleu')}`}>
+                      {log.action === 'login' ? t('connexion') : (log.action === 'logout' ? t('deconnexion') : log.action)}
                     </span>
                   </td>
                 </tr>

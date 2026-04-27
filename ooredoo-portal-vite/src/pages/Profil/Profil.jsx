@@ -14,25 +14,41 @@ export default function Profil() {
   const fileInputRef = useRef(null);
 
   const [profileData, setProfileData] = useState(null);
-  const [formData, setFormData] = useState({ nom: '', prenom: '', email: '' });
+  const [erreur, setErreur] = useState(null);
+  const [formData, setFormData] = useState({ nom: '', prenom: '', email: '', zone: '' });
   const [passwords, setPasswords] = useState({ current: '', new: '', confirm: '' });
+  const [userLogs, setUserLogs] = useState([]);
   const [msg, setMsg] = useState({ type: '', text: '' });
   const [chargement, setChargement] = useState(false);
 
   useEffect(() => {
     async function fetchProfile() {
+      if (!id) return;
+      setErreur(null);
       try {
         const res = await api.get(`/users/${id}`);
+        if (!res.data) throw new Error("Données de profil vides");
         setProfileData(res.data);
-        setFormData({ nom: res.data.nom, prenom: res.data.prenom, email: res.data.email });
+        setFormData({ 
+          nom: res.data.nom || '', 
+          prenom: res.data.prenom || '', 
+          email: res.data.email || '',
+          zone: res.data.zone || ''
+        });
+
+        // Charger aussi les logs de l'utilisateur
+        const logsRes = await api.get(`/logs/user/${id}`);
+        setUserLogs(logsRes.data || []);
       } catch (err) {
-        console.error(err);
+        console.error('Erreur API Profil:', err);
+        setErreur(err.response?.data?.message || err.message || "Erreur de chargement du profil");
       }
     }
     fetchProfile();
   }, [id]);
 
-  if (!profileData) return <div className="chargement">{t('chargement')}</div>;
+  if (erreur) return <div className="erreur-container"><div className="card"><h3>❌ {t('erreur')}</h3><p>{erreur}</p><button className="btn-rouge" onClick={() => navigate('/dashboard')}>Retour au Dashboard</button></div></div>;
+  if (!profileData) return <div className="chargement"><div className="spinner"></div><p>{t('chargement')}</p></div>;
 
   const handleUpdateInfo = async (e) => {
     e.preventDefault();
@@ -119,8 +135,8 @@ export default function Profil() {
             <input type="file" ref={fileInputRef} onChange={handlePhotoUpload} style={{ display: 'none' }} accept="image/*" />
             
             <h3>{profileData.prenom} {profileData.nom}</h3>
-            <span className={`badge-role ${profileData.role}`}>{profileData.role.replace('_', ' ')}</span>
-            <p className="since">{t('membre_depuis')} {formatDate(profileData.cree_le)}</p>
+            <span className={`badge-role ${profileData.role || ''}`}>{profileData.role ? profileData.role.replace('_', ' ') : ''}</span>
+            <p className="since">{t('membre_depuis')} {profileData.cree_le ? formatDate(profileData.cree_le) : ''}</p>
           </div>
 
           <div className="card droits-card">
@@ -153,8 +169,44 @@ export default function Profil() {
                 <label>{t('email_pro')}</label>
                 <input type="email" value={formData.email} onChange={e => setFormData({ ...formData, email: e.target.value })} required />
               </div>
+              <div className="input-group">
+                <label>{t('col_zone') || "Zone"}</label>
+                <select value={formData.zone} onChange={e => setFormData({ ...formData, zone: e.target.value })}>
+                  <option value="">Sélectionner une zone</option>
+                  <option value="Tunis Nord">Tunis Nord</option>
+                  <option value="Tunis Sud">Tunis Sud</option>
+                  <option value="Sousse">Sousse</option>
+                  <option value="Sfax">Sfax</option>
+                  <option value="Bizerte">Bizerte</option>
+                  <option value="Nabeul">Nabeul</option>
+                  <option value="Gabès">Gabès</option>
+                  <option value="Gafsa">Gafsa</option>
+                </select>
+              </div>
               <button type="submit" className="btn-rouge" disabled={chargement}>{t('enregistrer_modifs')}</button>
             </form>
+          </div>
+
+          {/* HISTORIQUE ACTIVITÉ */}
+          <div className="card activity-card">
+            <h3>📜 {t('journal_acces')} (Dernières actions)</h3>
+            <div className="activity-list">
+              {userLogs.length > 0 ? (
+                userLogs.map(log => (
+                  <div key={log.id} className="activity-item">
+                    <div className="activity-icon">
+                      {log.action === 'login' ? '🔑' : (log.action === 'logout' ? '🚪' : '⚡')}
+                    </div>
+                    <div className="activity-info">
+                      <p className="activity-action">{log.action === 'login' ? t('connexion') : (log.action === 'logout' ? t('deconnexion') : log.action)}</p>
+                      <span className="activity-date">{new Date(log.cree_le).toLocaleString()}</span>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <p className="empty-msg">{t('aucun_historique')}</p>
+              )}
+            </div>
           </div>
 
           {/* FORMULAIRE MOT DE PASSE */}
