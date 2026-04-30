@@ -1,0 +1,162 @@
+.sidebar {
+  background-color: white;
+  min-height: calc(100vh - 64px);
+  box-shadow: 2px 0 12px rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+  will-change: width, opacity, padding;
+  transition: width 0.5s cubic-bezier(0.25, 1, 0.5, 1), padding 0.5s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s ease-out;
+  overflow: hidden;
+  white-space: nowrap;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.sidebar.open {
+  width: 250px;
+  padding: 24px 16px;
+  opacity: 1;
+}
+
+.sidebar.closed {
+  width: 0px;
+  padding: 24px 0px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.sidebar-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  text-decoration: none;
+  color: var(--texte);
+  font-weight: 600;
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+
+.sidebar-link:hover {
+  background-color: #FFF0F0;
+  color: var(--rouge);
+}
+
+.sidebar-link.active {
+  background-color: var(--rouge);
+  color: white;
+}
+
+.sidebar-link .icon {
+  font-size: 18px;
+}
+
+.sidebar-avatar-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(0,0,0,0.1);
+  background: #fff;
+  transition: all 0.2s;
+}
+
+.sidebar-link:hover .sidebar-avatar-container {
+  border-color: var(--rouge);
+  transform: scale(1.1);
+}
+
+.sidebar-link.active .sidebar-avatar-container {
+  border-color: white;
+  background: rgba(255,255,255,0.2);
+}
+
+.sidebar-footer {
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: 1px solid var(--gris);
+}
+
+.btn-deconnexion-side {
+  width: 100%;
+  background: white;
+  border: 2px solid var(--rouge);
+  color: var(--rouge);
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  font-family: 'Exo 2', sans-serif;
+  transition: all 0.2s;
+}
+
+.btn-deconnexion-side:hover {
+  background: var(--rouge);
+  color: white;
+}
+
+/* Bouton Installer l'app - même style que sidebar-link */
+.sidebar-install-btn {
+  width: 100%;
+  background: transparent;
+  border: none;
+  color: var(--texte);
+  font-family: 'Exo 2', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: left;
+  border-radius: 8px;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: all 0.2s;
+}
+
+.sidebar-install-btn:hover {
+  background-color: #FFF0F0;
+  color: var(--rouge);
+}
+
+.badge-notif-side {
+  background-color: var(--rouge);
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 10px;
+  margin-left: auto;
+  border: 2px solid white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.sidebar-link.active .badge-notif-side {
+  background-color: white;
+  color: var(--rouge);
+  border: none;
+}
+
+/* ── RTL Support (Arabic) ── */
+[dir="rtl"] .sidebar {
+  box-shadow: -2px 0 12px rgba(0,0,0,0.05);
+}
+
+[dir="rtl"] .sidebar-install-btn {
+  text-align: right;
+}
+
+[dir="rtl"] .badge-notif-side {
+  margin-left: 0;
+  margin-right: auto;
+}
+
+[dir="rtl"] .sidebar-link {
+  flex-direction: row-reverse;
+}

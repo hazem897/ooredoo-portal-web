@@ -1,0 +1,70 @@
+.logs-page {
+  animation: fadeIn 0.3s ease;
+}
+
+.logs-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.logs-header h2 {
+  color: var(--rouge);
+}
+
+.filters-card {
+  margin-bottom: 24px;
+}
+
+.filters-card h3 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 16px;
+  color: var(--rouge);
+  font-family: 'Cairo', sans-serif;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.filters-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.filter-group label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--texte-clair);
+}
+
+.filter-group input, .filter-group select {
+  padding: 10px 14px;
+  border: 1px solid var(--gris);
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 14px;
+  transition: all 0.2s;
+  background-color: #fff;
+}
+
+.filter-group input:focus, .filter-group select:focus {
+  outline: none;
+  border-color: var(--rouge);
+  box-shadow: 0 0 0 3px rgba(227, 6, 19, 0.1);
+}
+
+@media (max-width: 768px) {
+  .logs-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
