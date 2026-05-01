@@ -377,6 +377,7 @@ html.compact-mode .tableau-header {
 
   .app-main {
     padding: 16px;
+    padding-bottom: 90px;
   }
 
   /* La sidebar devient un overlay sur mobile */

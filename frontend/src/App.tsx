@@ -8,6 +8,7 @@ import { LanguageProvider } from './context/LanguageContext';
 import MainLayout from './layouts/MainLayout';
 import RouteProtegee from './components/RouteProtegee';
 import RouteAdmin from './components/RouteAdmin';
+import PWAInstaller from './components/PWAInstaller';
 
 // Pages
 import Accueil from './pages/Accueil/Accueil';
@@ -37,6 +38,7 @@ function App() {
   return (
     <LanguageProvider>
       <AuthProvider>
+        <PWAInstaller />
         <BrowserRouter>
           <Routes>
 

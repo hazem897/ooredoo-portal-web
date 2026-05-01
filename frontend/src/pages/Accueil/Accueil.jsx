@@ -28,14 +28,14 @@ export default function Accueil() {
 
   useEffect(() => {
     if (!mapRef.current) return;
-    
+
     const posSiege = [36.8527, 10.2058]; // Charguia 2
     const posTunisie = [34.0, 9.5];   // Centre Tunisie
 
     if (!mapInstance.current) {
       mapInstance.current = L.map(mapRef.current, {
         zoomControl: true,
-        attributionControl: false, 
+        attributionControl: false,
         scrollWheelZoom: false
       }).setView(posTunisie, 6);
 
@@ -49,7 +49,7 @@ export default function Accueil() {
       });
 
       const marker = L.marker(posSiege, { icon: redIcon }).addTo(mapInstance.current);
-      
+
       const popupContent = `
         <div style="font-family: 'Inter', sans-serif; min-width: 250px;">
           <h4 style="color: #E30613; margin: 0 0 8px 0; font-family: 'Cairo', sans-serif;">${t('siege_ooredoo')}</h4>
@@ -66,9 +66,9 @@ export default function Accueil() {
 
       const flyToSiege = (duration = 10) => {
         if (mapInstance.current) {
-          mapInstance.current.flyTo(posSiege, 16, { 
+          mapInstance.current.flyTo(posSiege, 16, {
             duration: duration,
-            easeLinearity: 0.1 
+            easeLinearity: 0.1
           });
           mapInstance.current.once('moveend', () => {
             marker.openPopup();
@@ -77,7 +77,7 @@ export default function Accueil() {
       };
 
       setTimeout(() => flyToSiege(10), 2000);
-      mapRef.current._retour = () => flyToSiege(3); 
+      mapRef.current._retour = () => flyToSiege(3);
     }
 
     return () => {
@@ -204,7 +204,7 @@ export default function Accueil() {
         <p className="map-desc">{t('pbi_desc')}</p>
         <div className="map-container card" style={{ position: 'relative' }}>
           <div ref={mapRef} style={{ width: '100%', height: '450px', borderRadius: '12px' }}></div>
-          <button 
+          <button
             className="btn-retour-map"
             onClick={() => mapRef.current && mapRef.current._retour && mapRef.current._retour()}
             title={t('revenir_siege')}

@@ -12,7 +12,7 @@ CREATE TABLE users (
   prenom VARCHAR(100) NOT NULL,
   email VARCHAR(150) UNIQUE NOT NULL,
   mot_de_passe VARCHAR(255) NOT NULL,       -- haché avec bcrypt
-  role ENUM('admin','zone_manager','manager') NOT NULL,
+  role ENUM('admin','zone_manager','manager','conseiller') NOT NULL,
   zone VARCHAR(100),                         -- ex: Tunis Nord, Sfax...
   statut ENUM('en_attente','approuve','refuse') DEFAULT 'en_attente',
   photo_url VARCHAR(255),                    -- URL de la photo de profil

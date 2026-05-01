@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Navbar from '../components/layout/Navbar';
 import Sidebar from '../components/layout/Sidebar';
+import MobileBottomNav from '../components/layout/MobileBottomNav';
 
 function MainLayout({ children }) {
   const [isSidebarOpen, setSidebarOpen] = useState(() => {
@@ -12,7 +13,6 @@ function MainLayout({ children }) {
     setSidebarOpen(newVal);
     localStorage.setItem('sidebar_open', newVal.toString());
     
-    // Pour empêcher le scroll sur mobile quand la sidebar est ouverte
     if (newVal) {
       document.body.classList.add('sidebar-open');
     } else {
@@ -27,6 +27,7 @@ function MainLayout({ children }) {
         <Sidebar isOpen={isSidebarOpen} />
         <main className="app-main">{children}</main>
       </div>
+      <MobileBottomNav />
     </div>
   );
 }
