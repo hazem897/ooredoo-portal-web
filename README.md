@@ -72,7 +72,7 @@ backend/
 Le client est structuré par composants et pages, garantissant un code propre et un routage aisé.
 
 ```text
-ooredoo-portal-vite/
+frontend/
 ├── public/                 # Images et icônes statiques (manifeste PWA)
 ├── src/
 │   ├── api/                # Configuration Axios avec intercepteurs de requêtes/Tokens
@@ -129,7 +129,7 @@ Pour une sécurité "Zero Trust" (Zéro Confiance) sans perte de fonctionnalité
 
 ### Frontend
 
-1. Ouvrez un terminal dans le dossier frontend (`ooredoo-portal-vite`).
+1. Ouvrez un terminal dans le dossier frontend (`frontend`).
 2. Installez les dépendances : `npm install`
 3. Démarrez l'environnement de développement :
    ```bash
