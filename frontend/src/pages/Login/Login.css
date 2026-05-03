@@ -111,8 +111,37 @@
 }
 .btn-retour:hover { text-decoration: underline; }
 
+.mobile-logo-container {
+  display: none;
+  text-align: center;
+  margin-bottom: 30px;
+}
+.mobile-logo-container img {
+  height: 80px;
+  border-radius: 8px;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
-  .login-gauche { display: none; }
-  .login-droite { padding: 24px; }
+  .login-page {
+    flex-direction: column;
+  }
+  .login-gauche { 
+    display: none; 
+  }
+  .login-droite { 
+    padding: 24px; 
+    align-items: flex-start;
+    padding-top: 40px;
+  }
+  .mobile-logo-container {
+    display: block;
+  }
+  .login-form-wrapper h2 {
+    font-size: 26px;
+    text-align: center;
+  }
+  .login-sous-titre {
+    text-align: center;
+  }
 }

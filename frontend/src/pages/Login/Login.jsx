@@ -101,6 +101,9 @@ export default function Login() {
 
       <div className="login-droite">
         <div className="login-form-wrapper">
+          <div className="mobile-logo-container">
+            <img src="/ooredoo_logo.png" alt="Ooredoo Logo" />
+          </div>
 
           {etape === 1 ? (
             <>

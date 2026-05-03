@@ -22,6 +22,7 @@ import Profil from './pages/Profil/Profil';
 import Themes from './pages/Themes/Themes';
 import Alertes from './pages/Alertes/Alertes';
 import Notifications from './pages/Notifications/Notifications';
+import PowerBIPublic from './pages/PowerBI/PowerBI';
 
 import './index.css';
 
@@ -48,6 +49,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/powerbi" element={<PowerBIPublic />} />
 
           {/* Pages protégées */}
           <Route path="/dashboard" element={

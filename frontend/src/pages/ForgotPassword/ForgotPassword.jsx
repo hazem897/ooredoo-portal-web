@@ -99,6 +99,9 @@ export default function ForgotPassword() {
 
       <div className="login-droite">
         <div className="login-form-wrapper">
+          <div className="mobile-logo-container">
+            <img src="/ooredoo_logo.png" alt="Ooredoo Logo" />
+          </div>
           <div style={{ textAlign: 'center', marginBottom: '30px' }}>
              <div className="otp-icone" style={{ background: '#f8f9fa', width: '80px', height: '80px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto', boxShadow: 'inset 0 2px 10px rgba(0,0,0,0.05)' }}>
                <span style={{ fontSize: '40px' }}>

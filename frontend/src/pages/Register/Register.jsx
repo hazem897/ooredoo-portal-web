@@ -52,6 +52,9 @@ export default function Register() {
 
       <div className="login-droite">
         <div className="login-form-wrapper" style={{ maxWidth: 480 }}>
+          <div className="mobile-logo-container">
+            <img src="/ooredoo_logo.png" alt="Ooredoo Logo" />
+          </div>
           <h2>Créer un compte</h2>
           <p className="login-sous-titre">Votre demande sera examinée par un administrateur</p>
 

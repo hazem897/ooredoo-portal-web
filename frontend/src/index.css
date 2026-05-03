@@ -358,39 +358,74 @@ html.compact-mode .tableau-header {
 /* ── RESPONSIVITÉ MOBILE ── */
 @media (max-width: 768px) {
   .navbar {
-    padding: 0 16px;
+    padding: 0 12px;
   }
 
-  .navbar-links {
-    display: none;
-    /* Cacher les liens directs sur mobile, utiliser la sidebar */
+  .navbar-links, 
+  .navbar-pwa-install,
+  .lang-text {
+    display: none !important;
   }
 
   .navbar-lang-switcher {
-    margin: 0 8px;
+    margin: 0 4px;
   }
 
-  .lang-text {
-    display: none;
-    /* Cacher le texte de la langue sur petit écran */
+  .btn-hamburger {
+    display: flex !important;
+    padding: 8px !important;
+    margin-right: 8px !important;
+    color: var(--rouge) !important;
+    border-color: var(--rouge) !important;
+    background: #FFF0F0 !important;
+  }
+
+  .logo-text, .logo-sub {
+    font-size: 14px;
   }
 
   .app-main {
-    padding: 16px;
+    padding: 12px;
     padding-bottom: 90px;
   }
 
-  /* La sidebar devient un overlay sur mobile */
+  /* La sidebar devient un overlay sur mobile, EN DESSOUS de la navbar */
   .sidebar {
     position: fixed;
-    height: 100vh;
-    z-index: 1000;
+    height: calc(100vh - 64px); /* 100vh moins la hauteur de la navbar */
+    z-index: 99; /* Moins que la navbar (100) pour passer dessous, ou 1001 avec un top */
+    top: 64px; /* Commence après la navbar */
+    left: 0;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
   }
 
   .sidebar.open {
-    width: 80% !important;
-    /* Presque plein écran */
-    box-shadow: 0 0 100px rgba(0, 0, 0, 0.5);
+    width: 85% !important;
+    transform: translateX(0);
+    box-shadow: 10px 0 50px rgba(0, 0, 0, 0.5);
+  }
+
+  [dir="rtl"] .sidebar {
+    left: auto;
+    right: 0;
+    transform: translateX(100%);
+  }
+
+  [dir="rtl"] .sidebar.open {
+    transform: translateX(0);
+  }
+
+  /* Overlay sombre derrière la sidebar */
+  body.sidebar-open::after {
+    content: "";
+    position: fixed;
+    top: 64px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 98;
   }
 
   /* Empêcher le scroll du body quand la sidebar est ouverte */

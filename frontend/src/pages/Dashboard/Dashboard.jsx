@@ -142,11 +142,32 @@ function Dashboard() {
 
       {vue === 'powerbi' ? (
         <div className="powerbi-wrapper animated fadeIn">
+          <div className="powerbi-actions" style={{ marginBottom: '15px', display: 'flex', justifyContent: 'center' }}>
+            <button 
+              className="btn-pbi-full"
+              onClick={() => window.open("https://app.powerbi.com/groups/me/reports/d86779cf-0211-440f-87c4-588a5a1c6dc9/01e8f4606d1776d4bd27?experience=power-bi", "_blank")}
+              style={{
+                backgroundColor: '#E30613',
+                color: 'white',
+                padding: '10px 20px',
+                borderRadius: '8px',
+                border: 'none',
+                fontWeight: 'bold',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '10px',
+                boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
+              }}
+            >
+              📊 Ouvrir le Dashboard Interactif (Plein Écran)
+            </button>
+          </div>
           <div className="iframe-container card">
             <iframe
               title="Ooredoo Power BI"
               width="100%" height="100%"
-              src="https://playground.powerbi.com/sampleReportEmbed"
+              src="https://app.powerbi.com/reportEmbed?reportId=d86779cf-0211-440f-87c4-588a5a1c6dc9&autoAuth=true"
               frameBorder="0" allowFullScreen={true}
             ></iframe>
           </div>

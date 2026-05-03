@@ -101,6 +101,7 @@ export default function Accueil() {
           <nav className="nav-links">
             <a href="#accueil">Accueil</a>
             <a href="#fonctionnalites">Fonctionnalités</a>
+            <Link to="/powerbi" style={{ color: '#E30613', fontWeight: 'bold' }}>Rapport Public</Link>
             <a href="#produits">Produits Fix Jdid</a>
             <a href="#contact">Localisation</a>
             <a href="#propos">À propos</a>
@@ -134,6 +135,16 @@ export default function Accueil() {
           </p>
           <div className="hero-actions">
             <Link to="/login" className="btn-rouge">{t('se_connecter')} →</Link>
+            <Link to="/powerbi" className="btn-secondaire" style={{ 
+              background: 'white', 
+              color: '#E30613', 
+              border: '2px solid #E30613', 
+              padding: '10px 24px', 
+              borderRadius: '25px', 
+              textDecoration: 'none', 
+              fontWeight: 'bold',
+              marginLeft: '10px'
+            }}>📊 Voir le Rapport Public</Link>
           </div>
         </div>
         <div className="hero-deco">

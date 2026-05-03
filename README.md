@@ -44,6 +44,15 @@ Le portail a été conçu avec de nombreuses fonctionnalités avancées :
    - Historique d'accès et d'activité techniques enregistré en base de données.
    - Génération et envoi automatique (tâche Cron) de rapports au format PDF, CSV, et Excel.
 
+8. **📱 Compatibilité Mobile & UX Native**
+   - Responsivité complète : grilles fluides, Navbar dynamique et Hamburger Menu (SVG) visible sur tout écran.
+   - Menu latéral (Sidebar) en surimpression (Overlay) intelligente sur mobile, se refermant automatiquement pour laisser la vue dégagée.
+   - PWA optimisée avec un bouton "Installer" dédié pour les tablettes et les smartphones.
+
+9. **📊 Intégration Power BI Publique & Privée**
+   - Intégration sécurisée du Dashboard interactif Power BI dans l'espace protégé.
+   - Route publique `/powerbi` pour visualiser des rapports dynamiques (si publiés sur le Web) sans nécessiter de connexion au portail.
+
 ---
 
 ## 📂 Architecture et Structure du Projet
