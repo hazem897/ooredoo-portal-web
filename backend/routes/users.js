@@ -32,6 +32,12 @@ const userController = require('../controllers/userController');
 // GET /api/users - Liste tous les utilisateurs (Admin seulement)
 router.get('/', verifierToken, verifierRole('admin'), userController.getAllUsers);
 
+// POST /api/users - Créer un utilisateur manuellement (Admin seulement)
+router.post('/', verifierToken, verifierRole('admin'), userController.creerUser);
+
+// PUT /api/users/reset-password - Réinitialiser le mdp d'un user (Admin seulement)
+router.put('/reset-password', verifierToken, verifierRole('admin'), userController.reinitialiserMdp);
+
 // PUT /api/users/:id/approuver - Approuver/Refuser un user (Admin seulement)
 router.put('/:id/approuver', verifierToken, verifierRole('admin'), userController.approuverUser);
 

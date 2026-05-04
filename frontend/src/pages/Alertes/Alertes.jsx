@@ -4,6 +4,11 @@ import alertesService from '../../services/alertesService';
 import api from '../../utils/api';
 import { useAuth } from '../../context/AuthContext';
 import { useLanguage } from '../../context/LanguageContext';
+import { 
+  AlertCircle, Rocket, Ban, MessageSquare, Calendar, Snowflake, 
+  Send, RefreshCw, ChevronDown, CheckCircle2, XCircle, Mail, 
+  Search, FileSpreadsheet, FileDown, PlusCircle
+} from 'lucide-react';
 import './Alertes.css';
 
 // ─── Helpers ──────────────────────────────────────────────────
@@ -32,14 +37,14 @@ function BadgeStatut({ statut }) {
 }
 
 function BadgeUrgence({ heures }) {
-  if (heures >= 120) return <span className="badge-urgence critique">🔴 {formatHeures(heures)}</span>;
-  if (heures >= 72)  return <span className="badge-urgence alerte">🟠 {formatHeures(heures)}</span>;
-  return                     <span className="badge-urgence normal">🟡 {formatHeures(heures)}</span>;
+  if (heures >= 120) return <span className="badge-urgence critique"><AlertCircle size={12} style={{ marginRight: 4 }} /> {formatHeures(heures)}</span>;
+  if (heures >= 72)  return <span className="badge-urgence alerte"><AlertCircle size={12} style={{ marginRight: 4 }} /> {formatHeures(heures)}</span>;
+  return                     <span className="badge-urgence normal"><AlertCircle size={12} style={{ marginRight: 4 }} /> {formatHeures(heures)}</span>;
 }
 
 // ─── Sous-composant : Panneau d'alerte ────────────────────────
 function AlertePanel({ id, title, subtitle, icon, typeAlerte, btnClass, btnLabel, tickets = [], onRelanceIndividuelle, onRelanceGroupe }) {
-  const [ouvert, setOuvert] = useState(true);
+  const [ouvert, setOuvert] = useState(false);
   const [selectionnes, setSelectionnes] = useState([]);
   const [messagePerso, setMessagePerso] = useState('');
   const [showMessage, setShowMessage] = useState(false);
@@ -88,9 +93,10 @@ function AlertePanel({ id, title, subtitle, icon, typeAlerte, btnClass, btnLabel
         </div>
         <div className="panel-header-right">
           <span className={`panel-badge ${zero ? 'zero' : ''}`}>
-            {zero ? '✅ Aucune alerte' : `${tickets.length} ticket${tickets.length > 1 ? 's' : ''}`}
+            {zero ? <CheckCircle2 size={14} style={{ marginRight: 6 }} /> : null}
+            {zero ? 'Aucune alerte' : `${tickets.length} ticket${tickets.length > 1 ? 's' : ''}`}
           </span>
-          <span className={`chevron ${ouvert ? 'open' : ''}`}>▼</span>
+          <ChevronDown className={`chevron ${ouvert ? 'open' : ''}`} size={18} />
         </div>
       </div>
 
@@ -112,8 +118,9 @@ function AlertePanel({ id, title, subtitle, icon, typeAlerte, btnClass, btnLabel
                 <button
                   className="btn-select-all"
                   onClick={() => setShowMessage(m => !m)}
+                  style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
                 >
-                  💬 {showMessage ? 'Masquer message' : 'Ajouter un message'}
+                  <MessageSquare size={14} /> {showMessage ? 'Masquer message' : 'Ajouter un message'}
                 </button>
               )}
               <button
@@ -121,8 +128,9 @@ function AlertePanel({ id, title, subtitle, icon, typeAlerte, btnClass, btnLabel
                 onClick={handleRelanceGroupe}
                 disabled={selectionnes.length === 0 || envoi}
                 title={selectionnes.length === 0 ? 'Sélectionnez des tickets' : `Envoyer relance groupée aux Zone Managers`}
+                style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
               >
-                {envoi ? <span className="spinner-sm" /> : '📤'}
+                {envoi ? <span className="spinner-sm" /> : <Send size={18} />}
                 {btnLabel} {selectionnes.length > 0 && `(${selectionnes.length})`}
               </button>
             </div>
@@ -144,7 +152,7 @@ function AlertePanel({ id, title, subtitle, icon, typeAlerte, btnClass, btnLabel
           {/* Tableau */}
           {zero ? (
             <div className="empty-state">
-              <div className="empty-state-icon">✅</div>
+              <div className="empty-state-icon"><CheckCircle2 size={48} color="#62BB46" /></div>
               <p>Aucun ticket en alerte dans cette catégorie</p>
             </div>
           ) : (
@@ -202,12 +210,12 @@ function TicketRow({ ticket: t, selected, onSelect, typeAlerte, btnClass, messag
   };
 
   const rdvInfo = t.date_prise_rdv
-    ? <span style={{ color: '#16a34a', fontSize: 12 }}>📅 {formatDate(t.date_prise_rdv)}</span>
-    : <span className="badge-rdv-missing">❌ Non renseigné</span>;
+    ? <span style={{ color: '#62BB46', fontSize: 12, display: 'flex', alignItems: 'center', gap: '4px' }}><Calendar size={12} /> {formatDate(t.date_prise_rdv)}</span>
+    : <span className="badge-rdv-missing" style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><XCircle size={12} /> Non renseigné</span>;
 
   const crmInfo = t.crm_case
-    ? <span style={{ fontWeight: 600, color: '#1d4ed8', fontSize: 12 }}>🔗 {t.crm_case}</span>
-    : <span className="badge-rdv-missing">❌ Non renseigné</span>;
+    ? <span style={{ fontWeight: 600, color: '#171B60', fontSize: 12, display: 'flex', alignItems: 'center', gap: '4px' }}><Search size={12} /> {t.crm_case}</span>
+    : <span className="badge-rdv-missing" style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><XCircle size={12} /> Non renseigné</span>;
 
   const btnVariant = typeAlerte === 'rdv_non_pris' ? 'rdv'
                    : typeAlerte === 'en_cours_72h' ? 'encours'
@@ -238,7 +246,7 @@ function TicketRow({ ticket: t, selected, onSelect, typeAlerte, btnClass, messag
           {rdvInfo}
           {crmInfo}
           {t.statut_gel === 'oui' && (
-            <span className="badge-gel">🧊 Gelé</span>
+            <span className="badge-gel" style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Snowflake size={12} /> Gelé</span>
           )}
         </div>
       </td>
@@ -260,8 +268,9 @@ function TicketRow({ ticket: t, selected, onSelect, typeAlerte, btnClass, messag
           onClick={handleRelance}
           disabled={loading}
           title={`Envoyer une relance aux Zone Managers pour ce ticket`}
+          style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
         >
-          {loading ? <span className="spinner-sm" style={{ width: 12, height: 12 }} /> : '📧'}
+          {loading ? <span className="spinner-sm" style={{ width: 12, height: 12 }} /> : <Mail size={14} />}
           Relancer
         </button>
       </td>
@@ -276,10 +285,14 @@ function Toast({ message, type, onClose }) {
     return () => clearTimeout(t);
   }, [onClose]);
 
-  const icons = { success: '✅', error: '❌', info: 'ℹ️' };
+  const iconSet = { 
+    success: <CheckCircle2 size={18} color="#62BB46" />, 
+    error: <XCircle size={18} color="#F26A36" />, 
+    info: <AlertCircle size={18} color="#00BDF2" /> 
+  };
   return (
     <div className={`alertes-toast ${type}`}>
-      <span>{icons[type]}</span>
+      <span>{iconSet[type]}</span>
       <span>{message}</span>
     </div>
   );
@@ -392,7 +405,9 @@ export default function Alertes() {
       {/* Header */}
       <div className="alertes-header">
         <div>
-          <h1>🚨 Centre d'Alertes &amp; Relances</h1>
+          <h1 style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <AlertCircle size={32} color="#F26A36" /> Centre d'Alertes &amp; Relances
+          </h1>
           <p>
             Suivez les tickets en anomalie et envoyez des relances aux Zone Managers par email.
             Les réponses vous parviennent directement.
@@ -402,8 +417,9 @@ export default function Alertes() {
           className={`btn-refresh ${refreshing ? 'spinning' : ''}`}
           onClick={() => charger(true)}
           disabled={refreshing}
+          style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
         >
-          <span className="refresh-icon">🔄</span>
+          <RefreshCw size={18} className={refreshing ? 'spinning' : ''} />
           {refreshing ? 'Actualisation...' : 'Actualiser'}
         </button>
       </div>
@@ -418,7 +434,9 @@ export default function Alertes() {
               onClick={() => fileRefs[type].current.click()}
             >
               <span className="import-icon">
-                {type === 'activation' ? '🚀' : type === 'resiliation' ? '🚫' : '💬'}
+                {type === 'activation' ? <Rocket size={32} color="#00BDF2" /> : 
+                 type === 'resiliation' ? <Ban size={32} color="#F26A36" /> : 
+                 <MessageSquare size={32} color="#FEBD3B" />}
               </span>
               <h4>{t(type)}</h4>
               <p>Importer fichier Excel/CSV</p>
@@ -429,7 +447,8 @@ export default function Alertes() {
                 style={{ display: 'none' }}
                 accept=".xlsx, .xls, .csv"
               />
-              <button className="btn-import-box">
+              <button className="btn-import-box" style={{ display: 'flex', alignItems: 'center', gap: '8px', justifyContent: 'center' }}>
+                <PlusCircle size={16} />
                 {importStatus.type === type ? 'Importation...' : 'Choisir un fichier'}
               </button>
             </div>
@@ -442,22 +461,22 @@ export default function Alertes() {
         <div className="alerte-kpi total">
           <div className="kpi-number">{stats.total || 0}</div>
           <div className="kpi-label">Total alertes</div>
-          <span className="kpi-icon">🚨</span>
+          <AlertCircle className="kpi-icon" size={24} color="#F26A36" />
         </div>
         <div className="alerte-kpi rdv">
           <div className="kpi-number">{stats.activations || 0}</div>
           <div className="kpi-label">Activations</div>
-          <span className="kpi-icon">📅</span>
+          <Rocket className="kpi-icon" size={24} color="#00BDF2" />
         </div>
         <div className="alerte-kpi resiliation">
           <div className="kpi-number">{stats.resiliations || 0}</div>
           <div className="kpi-label">Résiliations</div>
-          <span className="kpi-icon">🚫</span>
+          <Ban className="kpi-icon" size={24} color="#F26A36" />
         </div>
         <div className="alerte-kpi plainte">
           <div className="kpi-number">{stats.plaintes || 0}</div>
           <div className="kpi-label">Plaintes</div>
-          <span className="kpi-icon">💬</span>
+          <MessageSquare className="kpi-icon" size={24} color="#FEBD3B" />
         </div>
       </div>
 
@@ -469,7 +488,7 @@ export default function Alertes() {
           id="panel-rdv"
           title="Alertes Activations"
           subtitle="Tickets d'activation avec anomalies (RDV non pris, délai dépassé ou gelé)"
-          icon="🚀"
+          icon={<Rocket size={28} color="#00BDF2" />}
           typeAlerte="activation"
           btnClass="btn-relance-rdv"
           btnLabel="Relancer Activation"
@@ -483,7 +502,7 @@ export default function Alertes() {
           id="panel-gele"
           title="Alertes Résiliations"
           subtitle="Tickets de résiliation en cours depuis plus de 48H"
-          icon="🚫"
+          icon={<Ban size={28} color="#F26A36" />}
           typeAlerte="resiliation"
           btnClass="btn-relance-gele"
           btnLabel="Relancer Résiliation"
@@ -497,7 +516,7 @@ export default function Alertes() {
           id="panel-encours"
           title="Alertes Plaintes"
           subtitle="Plaintes non résolues depuis plus de 48H"
-          icon="💬"
+          icon={<MessageSquare size={28} color="#FEBD3B" />}
           typeAlerte="plainte"
           btnClass="btn-relance-encours"
           btnLabel="Relancer Plainte"

@@ -3,6 +3,7 @@ import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import * as XLSX from 'xlsx';
 import { useLanguage } from '../../context/LanguageContext';
+import { ScrollText, FileSpreadsheet, FileText, FileDown, Search } from 'lucide-react';
 import './Journalisation.css';
 
 export default function Journalisation() {
@@ -145,22 +146,27 @@ export default function Journalisation() {
   return (
     <div className="logs-page">
       <div className="logs-header">
-        <h2>📜 {t('journal_acces')}</h2>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <ScrollText size={28} color="#171B60" />
+          <h2>{t('journal_acces')}</h2>
+        </div>
         <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-          <button onClick={exporterExcel} className="btn-rouge" style={{ backgroundColor: '#107c41', borderColor: '#107c41' }}>
-            📊 {t('export_excel')}
+          <button onClick={exporterExcel} className="btn-rouge" style={{ backgroundColor: '#62BB46', borderColor: '#62BB46', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <FileSpreadsheet size={18} /> {t('export_excel')}
           </button>
-          <button onClick={exporterCSV} className="btn-rouge" style={{ backgroundColor: '#EAA500', borderColor: '#EAA500', color: 'white' }}>
-            📄 {t('export_csv')}
+          <button onClick={exporterCSV} className="btn-rouge" style={{ backgroundColor: '#FEBD3B', borderColor: '#FEBD3B', color: 'white', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <FileText size={18} /> {t('export_csv')}
           </button>
-          <button onClick={exporterPDF} className="btn-rouge">
-            ⬇️ {t('export_pdf')}
+          <button onClick={exporterPDF} className="btn-rouge" style={{ backgroundColor: '#F26A36', borderColor: '#F26A36', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <FileDown size={18} /> {t('export_pdf')}
           </button>
         </div>
       </div>
 
       <div className="card filters-card">
-        <h3>🔍 {t('filtres_avances')}</h3>
+        <h3 style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <Search size={20} color="#171B60" /> {t('filtres_avances')}
+        </h3>
         <div className="filters-grid">
           <div className="filter-group">
             <label>{t('date_debut')} :</label>

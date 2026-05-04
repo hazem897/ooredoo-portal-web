@@ -1,4 +1,13 @@
 import React, { useState, useEffect } from 'react';
+import { 
+  Download, 
+  RefreshCw, 
+  CheckCircle2, 
+  Share, 
+  PlusSquare, 
+  X,
+  Smartphone
+} from 'lucide-react';
 import { usePWA } from '../hooks/usePWA';
 import './PWAInstaller.css';
 
@@ -20,7 +29,7 @@ export default function PWAInstaller() {
   useEffect(() => {
     // Only show install banner if not already installed
     if (!isStandalone) {
-      const timer = setTimeout(() => setVisible(true), 3000);
+      const timer = setTimeout(() => setVisible(true), 2000);
       return () => clearTimeout(timer);
     }
   }, [isStandalone]);
@@ -38,7 +47,7 @@ export default function PWAInstaller() {
       {/* Floating Action Button for Mobile Installation */}
       {!isStandalone && visible && (
         <button className="pwa-fab" onClick={handleInstallClick} title="Installer l'application">
-          <i className="fas fa-download"></i>
+          <Download size={24} color="white" />
         </button>
       )}
 
@@ -47,7 +56,7 @@ export default function PWAInstaller() {
         <div className="pwa-toast">
           <div className="pwa-toast-content">
             <div className="pwa-toast-icon">
-              {needRefresh ? '🔄' : '✅'}
+              {needRefresh ? <RefreshCw className="anim-spin" size={20} /> : <CheckCircle2 size={20} color="#16A34A" />}
             </div>
             <div className="pwa-toast-text">
               {needRefresh 
@@ -62,7 +71,7 @@ export default function PWAInstaller() {
               </button>
             )}
             <button className="btn-close-toast" onClick={closeUpdateToast}>
-              Fermer
+              <X size={18} />
             </button>
           </div>
         </div>
@@ -74,19 +83,19 @@ export default function PWAInstaller() {
           <div className="ios-modal" onClick={(e) => e.stopPropagation()}>
             <div className="ios-modal-header">
               <h3>Installer l'application</h3>
-              <button className="close-ios" onClick={() => setShowIOSModal(false)}>×</button>
+              <button className="close-ios" onClick={() => setShowIOSModal(false)}><X size={20} /></button>
             </div>
             <div className="ios-modal-body">
               <div className="ios-step">
                 <div className="step-number">1</div>
                 <div className="step-text">
-                  Cliquez sur le bouton <strong>'Partager'</strong> <i className="fas fa-arrow-up-from-bracket"></i> en bas de votre navigateur Safari.
+                  Cliquez sur le bouton <strong>'Partager'</strong> <Share size={18} style={{ verticalAlign: 'middle', margin: '0 4px' }} /> en bas de votre navigateur Safari.
                 </div>
               </div>
               <div className="ios-step">
                 <div className="step-number">2</div>
                 <div className="step-text">
-                  Faites défiler vers le bas et sélectionnez <strong>'Sur l'écran d'accueil'</strong> <i className="fas fa-square-plus"></i>.
+                  Faites défiler vers le bas et sélectionnez <strong>'Sur l'écran d'accueil'</strong> <PlusSquare size={18} style={{ verticalAlign: 'middle', margin: '0 4px' }} />.
                 </div>
               </div>
               <div className="ios-step">
@@ -110,13 +119,14 @@ export default function PWAInstaller() {
             </div>
             <div className="pwa-text">
                <strong>Application Ooredoo</strong>
-               <p>Installez le portail pour une expérience fluide et rapide.</p>
+               <p>Installez le portail pour une expérience fluide.</p>
             </div>
             <div className="pwa-actions">
                <button className="btn-install" onClick={installApp}>
+                 <Download size={16} style={{ marginRight: '8px' }} />
                  Installer
                </button>
-               <button className="btn-close-banner" onClick={() => setVisible(false)}>×</button>
+               <button className="btn-close-banner" onClick={() => setVisible(false)}><X size={20} /></button>
             </div>
           </div>
         </div>

@@ -804,16 +804,62 @@ html.dark-mode .lang-item:hover {
   font-size: 16px;
 }
 
+@media (max-width: 1024px) {
+  .desktop-only {
+    display: none !important;
+  }
+}
+
 @media (max-width: 768px) {
-  .pwa-text-nav {
-    display: none; /* Ne garder que l'icône sur mobile si besoin, ou garder le bouton court */
+  .navbar {
+    padding: 0 12px;
+    height: 60px;
   }
-  
-  .btn-pwa-nav {
-    padding: 8px 12px;
+
+  .navbar-logo-link img {
+    height: 35px !important;
+    margin-left: 8px !important;
   }
-  
-  .navbar-pwa-install {
+
+  .btn-hamburger {
+    padding: 6px 8px;
+    margin-right: 8px;
+  }
+
+  .navbar-lang-switcher {
     margin: 0 4px;
+  }
+
+  .lang-btn {
+    padding: 6px 10px;
+    gap: 4px;
+  }
+
+  .lang-text {
+    font-size: 11px;
+  }
+
+  .navbar-user {
+    gap: 8px;
+  }
+
+  .navbar-avatar-wrapper {
+    width: 32px;
+    height: 32px;
+  }
+
+  .btn-notification {
+    width: 35px;
+    height: 35px;
+  }
+}
+
+@media (max-width: 380px) {
+  .lang-text, .lang-arrow {
+    display: none; /* Ne garder que l'icône globe sur les très petits écrans */
+  }
+  
+  .lang-btn {
+    padding: 6px;
   }
 }

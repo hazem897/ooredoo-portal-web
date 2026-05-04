@@ -1,5 +1,16 @@
 import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
+import { 
+  LayoutDashboard, 
+  AlertTriangle, 
+  Bell, 
+  Users, 
+  ScrollText, 
+  Smartphone, 
+  Settings,
+  LogOut,
+  User as UserIcon
+} from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useLanguage } from '../../context/LanguageContext';
 import { usePWA } from '../../hooks/usePWA';
@@ -50,7 +61,7 @@ export default function Sidebar({ isOpen }) {
           to="/dashboard"
           className={({ isActive }) => isActive ? "sidebar-link active" : "sidebar-link"}
         >
-          <span className="icon">📊</span>
+          <LayoutDashboard className="icon" size={20} color="#00BDF2" />
           <span>{t('dashboard')}</span>
         </NavLink>
 
@@ -58,7 +69,7 @@ export default function Sidebar({ isOpen }) {
           to="/alertes"
           className={({ isActive }) => isActive ? "sidebar-link active" : "sidebar-link"}
         >
-          <span className="icon">🚨</span>
+          <AlertTriangle className="icon" size={20} color="#F26A36" />
           <span>Alertes &amp; Relances</span>
         </NavLink>
 
@@ -66,7 +77,7 @@ export default function Sidebar({ isOpen }) {
           to="/notifications"
           className={({ isActive }) => isActive ? "sidebar-link active" : "sidebar-link"}
         >
-          <span className="icon">🔔</span>
+          <Bell className="icon" size={20} color="#FEBD3B" />
           <span>{t('notifications')}</span>
         </NavLink>
 
@@ -76,7 +87,7 @@ export default function Sidebar({ isOpen }) {
               to="/utilisateurs"
               className={({ isActive }) => isActive ? "sidebar-link active" : "sidebar-link"}
             >
-              <span className="icon">👥</span>
+              <Users className="icon" size={20} color="#62BB46" />
               <span>{t('utilisateurs')}</span>
               {nbAttente > 0 && <span className="badge-notif-side">{nbAttente}</span>}
             </NavLink>
@@ -85,14 +96,14 @@ export default function Sidebar({ isOpen }) {
               to="/journalisation"
               className={({ isActive }) => isActive ? "sidebar-link active" : "sidebar-link"}
             >
-              <span className="icon">📜</span>
+              <ScrollText className="icon" size={20} color="#171B60" />
               <span>{t('journalisation')}</span>
             </NavLink>
           </>
         )}
 
         <button className="sidebar-link sidebar-install-btn" onClick={handleInstall}>
-          <span className="icon">📱</span>
+          <Smartphone className="icon" size={20} color="#8E5BA6" />
           <span>{t('installer')}</span>
         </button>
 
@@ -100,14 +111,7 @@ export default function Sidebar({ isOpen }) {
           to={`/profil/${user.id}`}
           className={({ isActive }) => isActive ? "sidebar-link active" : "sidebar-link"}
         >
-          <div className="sidebar-avatar-container" style={{ width: '24px', height: '24px', borderRadius: '50%', overflow: 'hidden', marginRight: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#eee' }}>
-            <img 
-              key={user.photo_url || 'default'}
-              src={user.photo_url || defaultAvatar} 
-              alt="" 
-              style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
-            />
-          </div>
+          <UserIcon className="icon" size={20} color="#CCB3D7" />
           <span>{t('profil')}</span>
         </NavLink>
 
@@ -115,13 +119,14 @@ export default function Sidebar({ isOpen }) {
           to="/parametres"
           className={({ isActive }) => isActive ? "sidebar-link active" : "sidebar-link"}
         >
-          <span className="icon">⚙️</span>
+          <Settings className="icon" size={20} color="#3D5567" />
           <span>{t('parametres')}</span>
         </NavLink>
       </div>
 
       <div className="sidebar-footer">
         <button className="btn-deconnexion-side" onClick={handleDeconnexion}>
+          <LogOut size={18} style={{ marginRight: '10px' }} />
           {t('deconnexion')}
         </button>
       </div>

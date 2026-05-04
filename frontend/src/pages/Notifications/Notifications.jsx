@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useAuth } from '../../context/AuthContext';
+import { Bell, Info, Ticket, FileText, AlertTriangle, Inbox, Check, X } from 'lucide-react';
 import './Notifications.css';
 
 export default function Notifications() {
@@ -38,7 +39,10 @@ export default function Notifications() {
   return (
     <div className="notifications-page animated fadeIn">
       <div className="notifs-header">
-        <h2>🔔 {t('notifications')}</h2>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <Bell size={28} color="var(--rouge)" />
+          <h2>{t('notifications')}</h2>
+        </div>
         <div className="notifs-actions">
           <button className="btn-secondary" onClick={() => setUnreadOnly(!unreadOnly)}>
             {unreadOnly ? "Voir tout" : "Voir non lues"}
@@ -55,7 +59,10 @@ export default function Notifications() {
             {filteredNotifs.map(n => (
               <div key={n.id} className={`notif-item ${n.lue ? 'lue' : 'non-lue'} ${n.type}`}>
                 <div className="notif-icon">
-                  {n.type === 'ticket' ? '🎫' : n.type === 'alerte' ? '⚠️' : n.type === 'rapport' ? '📊' : 'ℹ️'}
+                  {n.type === 'ticket' ? <Ticket size={20} color="#FEBD3B" /> : 
+                   n.type === 'alerte' ? <AlertTriangle size={20} color="#F26A36" /> : 
+                   n.type === 'rapport' ? <FileText size={20} color="#62BB46" /> : 
+                   <Info size={20} color="#00BDF2" />}
                 </div>
                 <div className="notif-content">
                   <p className="notif-text">{n.texte}</p>
@@ -68,11 +75,11 @@ export default function Notifications() {
                 <div className="notif-item-actions">
                   {!n.lue && (
                     <button className="btn-circle check" title="Marquer comme lue" onClick={() => toggleLue(n.id)}>
-                      ✓
+                      <Check size={16} />
                     </button>
                   )}
                   <button className="btn-circle delete" title="Supprimer" onClick={() => supprimerNotif(n.id)}>
-                    ✕
+                    <X size={16} />
                   </button>
                 </div>
               </div>
@@ -80,7 +87,9 @@ export default function Notifications() {
           </div>
         ) : (
           <div className="notifs-empty">
-            <div className="empty-icon">📭</div>
+            <div className="empty-icon">
+              <Inbox size={60} strokeWidth={1} />
+            </div>
             <p>Aucune notification à afficher.</p>
           </div>
         )}

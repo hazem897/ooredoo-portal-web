@@ -58,18 +58,31 @@ export default function Login() {
   }
 
   // ÉTAPE 2 : Vérifier le code OTP
-  async function handleOTP(e) {
-    e.preventDefault();
+  const verifyOTP = async (code = otp) => {
+    if (!code || code.length !== 6) return;
     setErreur('');
     setChargement(true);
     try {
-      const res = await api.post('/auth/verify-otp', { userId, otp });
+      const res = await api.post('/auth/verify-otp', { userId, otp: code });
       connecter(res.data.token, res.data.user);
       navigate('/dashboard');
     } catch (err) {
       setErreur(err.response?.data?.message || 'Code OTP incorrect');
+      setOtp(''); // Réinitialiser le code en cas d'erreur pour permettre une nouvelle saisie
     }
     setChargement(false);
+  };
+
+  // Détection automatique du code OTP (Taille = 6)
+  React.useEffect(() => {
+    if (otp.length === 6 && etape === 2 && !chargement) {
+      verifyOTP();
+    }
+  }, [otp, etape]);
+
+  async function handleOTP(e) {
+    if (e) e.preventDefault();
+    verifyOTP();
   }
 
   // Renvoyer le code
@@ -164,9 +177,14 @@ export default function Login() {
                     type="text"
                     placeholder="000000"
                     value={otp}
-                    onChange={e => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                    onChange={e => {
+                      const val = e.target.value.replace(/\D/g, '').slice(0, 6);
+                      setOtp(val);
+                    }}
                     maxLength={6}
-                    className="input-otp"
+                    className={`input-otp ${otp.length === 6 ? 'loading' : ''}`}
+                    disabled={chargement}
+                    autoFocus
                     required
                   />
                 </div>

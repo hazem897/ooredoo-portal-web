@@ -169,20 +169,6 @@ export default function Profil() {
                 <label>{t('email_pro')}</label>
                 <input type="email" value={formData.email} onChange={e => setFormData({ ...formData, email: e.target.value })} required />
               </div>
-              <div className="input-group">
-                <label>{t('col_zone') || "Zone"}</label>
-                <select value={formData.zone} onChange={e => setFormData({ ...formData, zone: e.target.value })}>
-                  <option value="">Sélectionner une zone</option>
-                  <option value="Tunis Nord">Tunis Nord</option>
-                  <option value="Tunis Sud">Tunis Sud</option>
-                  <option value="Sousse">Sousse</option>
-                  <option value="Sfax">Sfax</option>
-                  <option value="Bizerte">Bizerte</option>
-                  <option value="Nabeul">Nabeul</option>
-                  <option value="Gabès">Gabès</option>
-                  <option value="Gafsa">Gafsa</option>
-                </select>
-              </div>
               <button type="submit" className="btn-rouge" disabled={chargement}>{t('enregistrer_modifs')}</button>
             </form>
           </div>

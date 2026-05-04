@@ -4,7 +4,7 @@ const translations = {
   fr: {
     // Navigation
     dashboard: "Tableau de Bord",
-    tickets: "Accès aux Tickets",
+    tickets: "Accès aux Tables",
     utilisateurs: "Utilisateurs",
     journalisation: "Journalisation",
     parametres: "Paramètres",
@@ -46,7 +46,7 @@ const translations = {
     perfs_sla_desc: "Suivez en temps réel les performances SLA de vos services Outdoor, Indoor et Pro. Analysez les activations, plaintes et résiliations.",
     features: "Fonctionnalités",
     feature_dash_desc: "Visualisez le taux de respect des délais SLA par type et par produit en temps réel.",
-    feature_tickets_desc: "Suivez toutes les activations, plaintes et résiliations dans une interface unifiée.",
+    feature_tickets_desc: "Suivez toutes les activations, plaintes et résiliations dans une interface unifiée (Tables).",
     feature_users_desc: "Rôles Admin, Zone Manager et Manager avec système d'approbation.",
     feature_otp_desc: "Authentification à deux facteurs avec code OTP envoyé par email.",
     produits_fix_jdid: "Produits Fix Jdid",
@@ -60,7 +60,7 @@ const translations = {
     etat_services: "État des services",
 
     // Dashboard
-    total_tickets: "Total Tickets",
+    total_tickets: "Total Tables",
     activations: "Activations",
     plaintes: "Plaintes",
     resiliations: "Résiliations",
@@ -70,12 +70,12 @@ const translations = {
     resolus: "Résolus",
     en_cours: "En cours",
     ouvert: "Ouvert",
-    taux_sla: "Taux SLA par type de ticket",
-    evolution: "Évolution mensuelle des tickets",
+    taux_sla: "Taux SLA par type de table",
+    evolution: "Évolution mensuelle des tables",
     repartition: "Répartition par produit",
     delai_moyen: "Délai moyen (h)",
-    top_zones: "Top zones par tickets",
-    liste_tickets: "Liste des tickets",
+    top_zones: "Top zones par tables",
+    liste_tickets: "Liste des tables",
     tous_types: "Tous types",
     tous_statuts: "Tous statuts",
     tous_produits: "Tous produits",
@@ -91,7 +91,7 @@ const translations = {
     hors_sla: "Hors SLA",
     cible: "Cible (h)",
     reel: "Réel (h)",
-    aucun_ticket: "Aucun ticket trouvé",
+    aucun_ticket: "Aucune table trouvée",
 
     // Colonnes Tableaux
     col_id: "ID",
@@ -138,7 +138,7 @@ const translations = {
     // Rôles & Permissions
     droits_admin: "Contrôle total, Gestion utilisateurs, Logs système",
     droits_manager: "Dashboard global, Consultation uniquement",
-    droits_zone: "Gestion zone locale, Suivi tickets zone",
+    droits_zone: "Gestion zone locale, Suivi tables zone",
 
     // Divers
     chargement: "Chargement...",
@@ -208,7 +208,7 @@ const translations = {
     etat_services: "Service Status",
 
     // Dashboard
-    total_tickets: "Total Tickets",
+    total_tickets: "Total Tables",
     activations: "Activations",
     plaintes: "Complaints",
     resiliations: "Cancellations",
@@ -218,12 +218,12 @@ const translations = {
     resolus: "Resolved",
     en_cours: "In Progress",
     ouvert: "Open",
-    taux_sla: "SLA Rate by type",
+    taux_sla: "SLA Rate by table type",
     evolution: "Monthly Evolution",
     repartition: "Product Distribution",
     delai_moyen: "Avg Delay (h)",
     top_zones: "Top Zones",
-    liste_tickets: "Ticket List",
+    liste_tickets: "Table List",
     tous_types: "All types",
     tous_statuts: "All statuses",
     tous_produits: "All products",
@@ -239,7 +239,7 @@ const translations = {
     hors_sla: "Out of SLA",
     cible: "Target (h)",
     reel: "Actual (h)",
-    aucun_ticket: "No tickets found",
+    aucun_ticket: "No tables found",
 
     // Table Columns
     col_id: "ID",
@@ -299,7 +299,7 @@ const translations = {
   ar: {
     // Navigation
     dashboard: "لوحة القيادة",
-    tickets: "الوصول للتذاكر",
+    tickets: "الوصول للجداول",
     utilisateurs: "المستخدمين",
     journalisation: "السجلات",
     parametres: "الإعدادات",
@@ -355,7 +355,7 @@ const translations = {
     etat_services: "حالة الخدمات",
 
     // Dashboard
-    total_tickets: "إجمالي التذاكر",
+    total_tickets: "إجمالي الجداول",
     activations: "التفعيلات",
     plaintes: "الشكاوى",
     resiliations: "الإلغاءات",
@@ -365,12 +365,12 @@ const translations = {
     resolus: "تم حلها",
     en_cours: "قيد المعالجة",
     ouvert: "مفتوح",
-    taux_sla: "معدل SLA حسب النوع",
+    taux_sla: "معدل SLA حسب نوع الجدول",
     evolution: "التطور الشهري",
     repartition: "توزيع المنتجات",
     delai_moyen: "متوسط التأخير (س)",
     top_zones: "أهم المناطق",
-    liste_tickets: "قائمة التذاكر",
+    liste_tickets: "قائمة الجداول",
     tous_types: "كل الأنواع",
     tous_statuts: "كل الحالات",
     tous_produits: "كل المنتجات",
@@ -386,7 +386,7 @@ const translations = {
     hors_sla: "خارج SLA",
     cible: "المستهدف (س)",
     reel: "الفعلي (س)",
-    aucun_ticket: "لم يتم العثور على تذاكر",
+    aucun_ticket: "لم يتم العثور على جداول",
 
     // Table Columns
     col_id: "المعرف",

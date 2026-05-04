@@ -584,3 +584,51 @@ html {
     justify-content: center;
   }
 }
+/* RESPONSIVE HEADER & HERO */
+@media (max-width: 1024px) {
+  .nav-links {
+    display: none !important; /* Forcer la disparition des liens texte */
+  }
+
+  .header-container {
+    padding: 0 15px;
+  }
+
+  .nav-logo {
+    height: 30px;
+  }
+
+  .btn-rejoindre {
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+
+  .hero {
+    padding: 100px 20px 60px;
+    text-align: center;
+    justify-content: center;
+  }
+
+  .hero-contenu {
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .logo-hero {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .hero-actions {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .hero-actions .btn-rouge {
+    width: 100%;
+    max-width: 280px;
+  }
+}

@@ -223,6 +223,46 @@ const sendStatusEmail = async (email, nom, prenom, statut) => {
   });
 };
 
+const sendAccountCreatedEmail = async (email, nom, prenom, password, role) => {
+  const html = `
+    <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #eee; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+      <div style="background-color: #E30613; padding: 30px; text-align: center;">
+          <img src="cid:logo" width="140" alt="Ooredoo">
+      </div>
+      <div style="padding: 40px; background-color: #ffffff;">
+        <h2 style="color: #E30613; margin-bottom: 20px; font-size: 24px; text-align: center;">Bienvenue sur le Portail Ooredoo</h2>
+        <p style="font-size: 16px; color: #333;">Bonjour <strong>${prenom} ${nom}</strong>,</p>
+        <p style="font-size: 16px; color: #666; line-height: 1.6;">Un compte a été créé pour vous par un administrateur. Voici vos identifiants de connexion :</p>
+        
+        <div style="background-color: #f9f9f9; padding: 20px; border-radius: 8px; margin: 25px 0; border-left: 4px solid #E30613;">
+          <p style="margin: 5px 0;"><strong>📧 Email :</strong> ${email}</p>
+          <p style="margin: 5px 0;"><strong>🔑 Mot de passe :</strong> <code style="background: #eee; padding: 2px 6px; border-radius: 4px; font-weight: bold;">${password}</code></p>
+          <p style="margin: 5px 0;"><strong>👤 Rôle :</strong> ${role}</p>
+        </div>
+
+        <div style="text-align: center; margin-top: 30px;">
+          <a href="https://discount-compare-buffing.ngrok-free.dev/login" style="display: inline-block; padding: 14px 30px; background-color: #E30613; color: #ffffff; text-decoration: none; border-radius: 30px; font-weight: bold;">Se connecter maintenant</a>
+        </div>
+        
+        <p style="font-size: 13px; color: #999; margin-top: 30px; text-align: center; font-style: italic;">
+          Pour des raisons de sécurité, nous vous recommandons de changer votre mot de passe dès votre première connexion dans les paramètres de votre profil.
+        </p>
+      </div>
+      <div style="padding: 20px; background-color: #f4f4f4; text-align: center; font-size: 11px; color: #999; border-top: 1px solid #eee;">
+        © 2026 Ooredoo Tunisie - Support Technique
+      </div>
+    </div>
+  `;
+
+  return transporter.sendMail({
+    from: process.env.EMAIL_FROM || `"Ooredoo Portal" <noreply@ooredoo.tn>`,
+    to: email,
+    subject: "🎉 Bienvenue sur votre nouveau compte Ooredoo Portal",
+    html,
+    attachments: [LOGO_ATTACHMENT]
+  });
+};
+
 // ──────────────────────────────────────────────────────────────
 // Envoi relance email pour UN ticket - vers les zone managers
 // ──────────────────────────────────────────────────────────────
@@ -427,6 +467,7 @@ module.exports = {
   sendAdminRegistrationAlert,
   sendDailyReportEmail,
   sendNewPasswordEmail,
+  sendAccountCreatedEmail,
   sendStatusEmail,
   sendAlertRelance,
   sendAlertRelanceGroupe

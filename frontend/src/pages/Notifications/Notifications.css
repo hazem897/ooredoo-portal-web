@@ -52,19 +52,23 @@
 }
 
 .notif-icon {
-  font-size: 24px;
   margin-right: 20px;
-  width: 45px;
-  height: 45px;
+  width: 42px;
+  height: 42px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #f4f4f4;
-  border-radius: 50%;
+  background: white;
+  border-radius: 12px; /* Style moderne carré arrondi */
+  box-shadow: 0 4px 10px rgba(0,0,0,0.04);
+  border: 1px solid #f0f0f0;
+  flex-shrink: 0;
 }
 
 .notif-item.non-lue .notif-icon {
-  background: rgba(227, 6, 19, 0.1);
+  background: white;
+  border-color: rgba(227, 6, 19, 0.1);
+  box-shadow: 0 4px 12px rgba(227, 6, 19, 0.08);
 }
 
 .notif-content {

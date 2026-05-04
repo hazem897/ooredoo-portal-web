@@ -9,6 +9,11 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       injectRegister: 'auto',
+      selfDestroying: false,
+      devOptions: {
+        enabled: true,
+        type: 'module'
+      },
       includeAssets: ['favicon.svg', 'ooredoo_icon.png', 'ooredoo_logo.png', 'screenshots/*.png'],
       manifest: {
         name: 'Portail Interne Ooredoo',
@@ -93,6 +98,21 @@ export default defineConfig({
   server: {
     host: '0.0.0.0',
     allowedHosts: true,
+    proxy: {
+      '/api': {
+        target: 'http://127.0.0.1:5000',
+        changeOrigin: true
+      },
+      '/uploads': {
+        target: 'http://127.0.0.1:5000',
+        changeOrigin: true
+      }
+    }
+  },
+  preview: {
+    host: '0.0.0.0',
+    allowedHosts: true,
+    port: 4173,
     proxy: {
       '/api': {
         target: 'http://127.0.0.1:5000',

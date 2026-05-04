@@ -1,10 +1,11 @@
 // frontend/src/pages/Dashboard.jsx
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
+import { 
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
   LineChart, Line, PieChart, Pie, Cell
 } from 'recharts';
+import { Bell, LayoutDashboard, BarChart2, MapPin } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useLanguage } from '../../context/LanguageContext';
 import dashboardService from '../../services/dashboardService';
@@ -125,7 +126,7 @@ function Dashboard() {
 
       {user?.role === 'admin' && stats?.kpis?.utilisateurs_en_attente > 0 && (
         <div className="alert-box animated pulse" onClick={() => navigate('/utilisateurs')}>
-          <span className="icon">🔔</span>
+          <Bell className="icon" size={24} color="#F26A36" />
           <p>Vous avez <strong>{stats.kpis.utilisateurs_en_attente}</strong> demandes de création de compte en attente d'approbation.</p>
           <button className="btn-small">{t('voir')}</button>
         </div>
@@ -133,10 +134,12 @@ function Dashboard() {
 
       <div className="dash-tabs">
         <button className={`tab-btn ${vue === 'synthese' ? 'active' : ''}`} onClick={() => setVue('synthese')}>
-          🏠 {t('synthese_native')}
+          <LayoutDashboard size={18} color={vue === 'synthese' ? 'white' : '#00BDF2'} style={{ marginRight: '8px' }} />
+          {t('synthese_native')}
         </button>
         <button className={`tab-btn ${vue === 'powerbi' ? 'active' : ''}`} onClick={() => setVue('powerbi')}>
-          📊 {t('analytique_pbi')}
+          <BarChart2 size={18} color={vue === 'powerbi' ? 'white' : '#62BB46'} style={{ marginRight: '8px' }} />
+          {t('analytique_pbi')}
         </button>
       </div>
 
@@ -145,7 +148,7 @@ function Dashboard() {
           <div className="powerbi-actions" style={{ marginBottom: '15px', display: 'flex', justifyContent: 'center' }}>
             <button 
               className="btn-pbi-full"
-              onClick={() => window.open("https://app.powerbi.com/groups/me/reports/d86779cf-0211-440f-87c4-588a5a1c6dc9/01e8f4606d1776d4bd27?experience=power-bi", "_blank")}
+              onClick={() => window.open("https://app.powerbi.com/reportEmbed?reportId=92ab7e74-2874-45d4-899a-dea7031bccfd&autoAuth=true&ctid=dbd6664d-4eb9-46eb-99d8-5c43ba153c61&actionBarEnabled=true&reportCopilotInEmbed=true", "_blank")}
               style={{
                 backgroundColor: '#E30613',
                 color: 'white',
@@ -160,14 +163,14 @@ function Dashboard() {
                 boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
               }}
             >
-              📊 Ouvrir le Dashboard Interactif (Plein Écran)
+              <BarChart2 size={18} /> Ouvrir le Dashboard Interactif (Plein Écran)
             </button>
           </div>
           <div className="iframe-container card">
             <iframe
-              title="Ooredoo Power BI"
+              title="Dashbord_Fixe_Jdid"
               width="100%" height="100%"
-              src="https://app.powerbi.com/reportEmbed?reportId=d86779cf-0211-440f-87c4-588a5a1c6dc9&autoAuth=true"
+              src="https://app.powerbi.com/reportEmbed?reportId=92ab7e74-2874-45d4-899a-dea7031bccfd&autoAuth=true&ctid=dbd6664d-4eb9-46eb-99d8-5c43ba153c61&actionBarEnabled=true&reportCopilotInEmbed=true"
               frameBorder="0" allowFullScreen={true}
             ></iframe>
           </div>
@@ -230,6 +233,27 @@ function Dashboard() {
                   <Line type="monotone" dataKey="plainte" stroke={COULEURS.plainte} dot={false} />
                   <Line type="monotone" dataKey="resiliation" stroke={COULEURS.resiliation} dot={false} />
                 </LineChart>
+              </ResponsiveContainer>
+            </div>
+
+            <div className="card graphique-card">
+              <h3>{t('repartition_produit') || 'Répartition par Produit'}</h3>
+              <ResponsiveContainer width="100%" height={260}>
+                <PieChart>
+                  <Pie
+                    data={dataPie}
+                    innerRadius={60}
+                    outerRadius={80}
+                    paddingAngle={5}
+                    dataKey="value"
+                  >
+                    {dataPie.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} />
+                    ))}
+                  </Pie>
+                  <Tooltip />
+                  <Legend />
+                </PieChart>
               </ResponsiveContainer>
             </div>
           </div>

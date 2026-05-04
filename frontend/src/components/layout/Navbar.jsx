@@ -1,9 +1,23 @@
 import React, { useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { 
+  Globe, 
+  Bell, 
+  LogOut, 
+  Settings, 
+  User as UserIcon, 
+  LayoutDashboard, 
+  Users, 
+  ScrollText,
+  Menu,
+  Download,
+  Info,
+  AlertCircle,
+  CheckCircle2
+} from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useLanguage } from '../../context/LanguageContext';
 import defaultAvatar from '../../assets/default-avatar.png';
-// Suppression de l'import pour utiliser le chemin public direct
 import { usePWA } from '../../hooks/usePWA';
 import './Navbar.css';
 
@@ -13,24 +27,18 @@ function Navbar({ toggleSidebar }) {
   const navigate = useNavigate();
   const { isInstallable, installApp } = usePWA();
   const [showNotifs, setShowNotifs] = useState(false);
-
-
-
-
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showLangMenu, setShowLangMenu] = useState(false);
 
-  // Utiliser localStorage pour que le badge reste masqué même après navigation
   const [unreadCount, setUnreadCount] = useState(() => {
     const isRead = localStorage.getItem(`notifs_read_${user?.id}`);
     return isRead === 'true' ? 0 : 3;
   });
 
-  // Fausse liste de notifications (à remplacer par des données API si besoin)
   const notifications = [
-    { id: 1, type: 'info', icone: '👋', titre: "Bienvenue", texte: "Bienvenue sur le nouveau portail Ooredoo !", temps: "1h" },
-    { id: 2, type: 'warning', icone: '🎫', titre: "Nouveau Ticket", texte: "Un nouveau ticket #4502 a été créé dans votre zone.", temps: "2h" },
-    { id: 3, type: 'success', icone: '📊', titre: "Rapport Prêt", texte: "Votre rapport d'activité mensuel est disponible.", temps: "5h" }
+    { id: 1, type: 'info', icone: <Info size={16} color="#00BDF2" />, titre: "Bienvenue", texte: "Bienvenue sur le nouveau portail Ooredoo !", temps: "1h" },
+    { id: 2, type: 'warning', icone: <AlertCircle size={16} color="#F26A36" />, titre: "Nouveau Ticket", texte: "Un nouveau ticket #4502 a été créé dans votre zone.", temps: "2h" },
+    { id: 3, type: 'success', icone: <CheckCircle2 size={16} color="#62BB46" />, titre: "Rapport Prêt", texte: "Votre rapport d'activité mensuel est disponible.", temps: "5h" }
   ];
 
   const handleDeconnexion = () => {
@@ -52,15 +60,10 @@ function Navbar({ toggleSidebar }) {
     <nav className="navbar">
       <div className="navbar-logo">
         <button className="btn-hamburger" onClick={toggleSidebar}>
-          <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <line x1="3" y1="12" x2="21" y2="12"></line>
-            <line x1="3" y1="6" x2="21" y2="6"></line>
-            <line x1="3" y1="18" x2="21" y2="18"></line>
-          </svg>
+          <Menu size={24} />
         </button>
 
         <Link to={user ? "/dashboard" : "/"} className="navbar-logo-link">
-
           <img src="/ooredoo_logo.png" alt="Ooredoo" style={{ height: '50px', marginLeft: '16px' }} />
         </Link>
       </div>
@@ -68,11 +71,7 @@ function Navbar({ toggleSidebar }) {
       <div className="navbar-lang-switcher">
         <div className="custom-dropdown" onClick={() => setShowLangMenu(!showLangMenu)}>
           <button className="lang-btn">
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <circle cx="12" cy="12" r="10"></circle>
-              <line x1="2" y1="12" x2="22" y2="12"></line>
-              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
-            </svg>
+            <Globe size={18} color="#00BDF2" />
             <span className="lang-text">{lang.toUpperCase()}</span>
             <span className={`lang-arrow ${showLangMenu ? 'up' : 'down'}`}>▾</span>
           </button>
@@ -93,21 +92,35 @@ function Navbar({ toggleSidebar }) {
         </div>
       </div>
 
-      <div className="navbar-links">
-
+      <div className="navbar-links desktop-only">
         {user ? (
           <>
-            <NavLink to="/dashboard">📊 {t('dashboard')}</NavLink>
+            <NavLink to="/dashboard">
+              <LayoutDashboard size={18} color="#00BDF2" style={{ verticalAlign: 'middle', marginRight: '6px' }} />
+              {t('dashboard')}
+            </NavLink>
             {user.role === 'admin' && (
               <>
-                <NavLink to="/utilisateurs">👥 {t('utilisateurs')}</NavLink>
-                <NavLink to="/journalisation">📜 {t('journalisation')}</NavLink>
+                <NavLink to="/utilisateurs">
+                  <Users size={18} color="#62BB46" style={{ verticalAlign: 'middle', marginRight: '6px' }} />
+                  {t('utilisateurs')}
+                </NavLink>
+                <NavLink to="/journalisation">
+                  <ScrollText size={18} color="#171B60" style={{ verticalAlign: 'middle', marginRight: '6px' }} />
+                  {t('journalisation')}
+                </NavLink>
               </>
             )}
-            <NavLink to="/parametres">⚙️ {t('parametres')}</NavLink>
+            <NavLink to="/parametres">
+              <Settings size={18} color="#3D5567" style={{ verticalAlign: 'middle', marginRight: '6px' }} />
+              {t('parametres')}
+            </NavLink>
           </>
         ) : (
-          <Link to="/login" className="nav-login-link">🔐 {t('se_connecter')}</Link>
+          <Link to="/login" className="nav-login-link">
+            <LogOut size={18} style={{ verticalAlign: 'middle', marginRight: '6px', transform: 'rotate(180deg)' }} />
+            {t('se_connecter')}
+          </Link>
         )}
       </div>
 
@@ -115,7 +128,7 @@ function Navbar({ toggleSidebar }) {
         <div className="navbar-user">
           <div className="notification-container">
             <button className={`btn-notification ${unreadCount > 0 ? 'anim-ring' : ''}`} onClick={handleNotifClick}>
-              🔔
+              <Bell size={20} color="#FEBD3B" />
               {unreadCount > 0 && <span className="notif-badge">{unreadCount}</span>}
             </button>
 
@@ -148,10 +161,10 @@ function Navbar({ toggleSidebar }) {
             )}
           </div>
 
-          {/* Bouton d'installation PWA (Mobile) - Toujours visible pour le confort */}
-          <div className="navbar-pwa-install">
+          <div className="navbar-pwa-install desktop-only">
             <button className="btn-pwa-nav" onClick={installApp} title="Installer l'application">
-              📲 <span className="pwa-text-btn">{t('installer') || 'Installer'}</span>
+              <Download size={16} color="#8E5BA6" />
+              <span className="pwa-text-btn">{t('installer') || 'Installer'}</span>
             </button>
           </div>
 
@@ -170,10 +183,19 @@ function Navbar({ toggleSidebar }) {
 
             {showUserMenu && (
               <div className="user-dropdown-menu">
-                <Link to={`/profil/${user.id}`} className="dropdown-item" onClick={() => setShowUserMenu(false)}>👤 {t('mon_profil') || t('profil')}</Link>
-                <Link to="/parametres" className="dropdown-item" onClick={() => setShowUserMenu(false)}>⚙️ {t('parametres')}</Link>
+                <Link to={`/profil/${user.id}`} className="dropdown-item" onClick={() => setShowUserMenu(false)}>
+                  <UserIcon size={16} color="#CCB3D7" style={{ marginRight: '8px', verticalAlign: 'middle' }} />
+                  {t('mon_profil') || t('profil')}
+                </Link>
+                <Link to="/parametres" className="dropdown-item" onClick={() => setShowUserMenu(false)}>
+                  <Settings size={16} color="#3D5567" style={{ marginRight: '8px', verticalAlign: 'middle' }} />
+                  {t('parametres')}
+                </Link>
                 <div className="dropdown-divider"></div>
-                <button className="dropdown-item btn-logout" onClick={handleDeconnexion}>🚪 {t('deconnexion')}</button>
+                <button className="dropdown-item btn-logout" onClick={handleDeconnexion}>
+                  <LogOut size={16} color="#F26A36" style={{ marginRight: '8px', verticalAlign: 'middle' }} />
+                  {t('deconnexion')}
+                </button>
               </div>
             )}
           </div>

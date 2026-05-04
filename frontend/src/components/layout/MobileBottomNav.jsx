@@ -1,5 +1,12 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import { 
+  LayoutDashboard, 
+  AlertTriangle, 
+  Download, 
+  Bell, 
+  User 
+} from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { usePWA } from '../../hooks/usePWA';
 import './MobileBottomNav.css';
@@ -13,12 +20,12 @@ export default function MobileBottomNav() {
   return (
     <nav className="mobile-bottom-nav">
       <NavLink to="/dashboard" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
-        <span className="nav-icon">📊</span>
+        <LayoutDashboard className="nav-icon" size={20} color="#00BDF2" />
         <span className="nav-label">Stats</span>
       </NavLink>
 
       <NavLink to="/alertes" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
-        <span className="nav-icon">⚠️</span>
+        <AlertTriangle className="nav-icon" size={20} color="#F26A36" />
         <span className="nav-label">Alertes</span>
       </NavLink>
 
@@ -26,19 +33,19 @@ export default function MobileBottomNav() {
       {!isStandalone && isInstallable && (
         <button onClick={installApp} className="nav-item install-btn-mobile">
           <div className="install-icon-wrapper">
-            <span className="nav-icon">📲</span>
+            <Download className="nav-icon" size={22} color="white" />
           </div>
           <span className="nav-label">Installer</span>
         </button>
       )}
 
       <NavLink to="/notifications" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
-        <span className="nav-icon">🔔</span>
+        <Bell className="nav-icon" size={20} color="#FEBD3B" />
         <span className="nav-label">Notifs</span>
       </NavLink>
 
       <NavLink to={`/profil/${user.id}`} className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
-        <span className="nav-icon">👤</span>
+        <User className="nav-icon" size={20} color="#CCB3D7" />
         <span className="nav-label">Profil</span>
       </NavLink>
     </nav>

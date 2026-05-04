@@ -85,3 +85,19 @@ ooredoo-portal-vite/
 > **Rappel de commande :**
 > - Lancer le backend : `node server.js`
 > - Lancer le frontend : `npm run dev`
+
+---
+
+## 🌐 3. Liaisons & Connectivité (Tunnels et Domaines)
+
+Pour permettre l'accès externe et la communication entre les modules, le projet utilise actuellement deux types de tunnels :
+
+| Service | Rôle | Lien Actuel | Fichier de Config |
+| :--- | :--- | :--- | :--- |
+| **Cloudflare** | Proxy API (Frontend) | `career-seafood-gzip-routes.trycloudflare.com` | `frontend/vercel.json` |
+| **ngrok** | Lien de connexion (Emails) | `discount-compare-buffing.ngrok-free.dev` | `backend/services/emailService.js` |
+
+### 🗄️ Note sur la Synchronisation PostgreSQL
+Une base de données **PostgreSQL** complète est située sur une machine distante.
+- **État actuel** : L'application utilise MySQL localement (`ooredoo_portal`).
+- **Action requise** : Pour synchroniser ou lier cette base, il est recommandé de modifier `backend/config/db.js` pour utiliser le driver `pg` (PostgreSQL) et pointer vers l'IP de la machine distante.

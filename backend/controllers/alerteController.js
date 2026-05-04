@@ -27,8 +27,8 @@ exports.getAlertes = async (req, res) => {
       WHERE t.type_ticket = 'activation'
         AND t.statut NOT IN ('resolu', 'ferme')
         AND (
-          (t.date_prise_rdv IS NULL AND TIMESTAMPDIFF(HOUR, t.date_creation, NOW()) >= 48)
-          OR (t.statut = 'en_cours' AND TIMESTAMPDIFF(HOUR, t.date_creation, NOW()) >= 72)
+          (t.date_prise_rdv IS NULL AND t.date_creation <= NOW() - INTERVAL 48 HOUR)
+          OR (t.statut = 'en_cours' AND t.date_creation <= NOW() - INTERVAL 72 HOUR)
           OR (t.statut_gel = 'oui')
         )
         ${zoneWhere}
@@ -43,7 +43,7 @@ exports.getAlertes = async (req, res) => {
       FROM tickets t
       WHERE t.type_ticket = 'resiliation'
         AND t.statut NOT IN ('resolu', 'ferme')
-        AND TIMESTAMPDIFF(HOUR, t.date_creation, NOW()) >= 48
+        AND t.date_creation <= NOW() - INTERVAL 48 HOUR
         ${zoneWhere}
       ORDER BY heures_ecoulees DESC
     `, [...zoneParam]);
@@ -56,7 +56,7 @@ exports.getAlertes = async (req, res) => {
       FROM tickets t
       WHERE t.type_ticket = 'plainte'
         AND t.statut NOT IN ('resolu', 'ferme')
-        AND TIMESTAMPDIFF(HOUR, t.date_creation, NOW()) >= 48
+        AND t.date_creation <= NOW() - INTERVAL 48 HOUR
         ${zoneWhere}
       ORDER BY heures_ecoulees DESC
     `, [...zoneParam]);

@@ -23,9 +23,9 @@ app.use('/api', generalLimiter);
 
 // A06: Rate Limiting spécifique pour l'authentification (Antibrute-force)
 const authLimiter = rateLimit({
-  windowMs: 30 * 60 * 1000, // 30 minutes
-  max: 20, // 20 tentatives max
-  message: { message: 'Sécurité : Trop de tentatives. Veuillez attendre 30 minutes.' }
+  windowMs: 15 * 60 * 1000, // Réduit à 15 min
+  max: 100, // Augmenté à 100 pour éviter les blocages tunnel
+  message: { message: 'Sécurité : Trop de tentatives.' }
 });
 app.use('/api/auth/login', authLimiter);
 app.use('/api/auth/forgot-password', authLimiter);

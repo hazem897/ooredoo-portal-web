@@ -61,7 +61,20 @@ export function usePWA() {
   }, []);
 
   const installApp = async () => {
-    if (!deferredPrompt) return;
+    if (isStandalone) {
+      alert("L'application est déjà installée !");
+      return;
+    }
+
+    if (isIOS) {
+      alert("Pour installer sur iPhone/iPad :\n\n1. Cliquez sur l'icône de partage (le carré avec une flèche en bas).\n2. Faites défiler et cliquez sur 'Sur l'écran d'accueil'.");
+      return;
+    }
+
+    if (!deferredPrompt) {
+      alert("Le navigateur n'est pas encore prêt pour l'installation.\n\nEssayez de rafraîchir la page ou d'attendre quelques secondes.");
+      return;
+    }
     
     deferredPrompt.prompt();
     const { outcome } = await deferredPrompt.userChoice;
