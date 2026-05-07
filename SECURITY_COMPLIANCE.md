@@ -1,37 +1,51 @@
-# OWASP Top 10 Security Compliance Report - Ooredoo Portal
+# Rapport de Conformité Sécurité NIST - Portail Ooredoo
 
-Ce document récapitule les mesures de sécurité mises en œuvre pour protéger le portail de gestion Ooredoo contre les vulnérabilités courantes.
+Ce document récapitule les mesures de sécurité mises en œuvre pour protéger le portail de gestion Ooredoo, conformément aux domaines de contrôle du framework NIST SP 800-171.
 
-## 🛡️ Mesures de Sécurité Implémentées
+---
 
-### A01:2021 - Contrôle d'Accès Défaillant (Broken Access Control)
+## 🛡️ Mesures de Sécurité Implémentées (Version NIST)
+
+### 1. Access Control (AC)
 - **Authentification JWT** : Toutes les routes sensibles (`/api/users`, `/api/dashboard`, `/api/tickets`, etc.) sont protégées par un middleware `verifierToken`.
 - **Contrôle par Rôle (RBAC)** : Les actions critiques (import de tickets, approbation d'utilisateurs, accès aux logs) sont restreintes au rôle `admin` via `verifierRole('admin')`.
 - **Prévention IDOR** : Les routes de profil utilisateur vérifient que l'utilisateur connecté ne peut modifier ou voir que son propre profil (`req.user.id === req.params.id`).
-- **Logout Sécurisé** : Le log de déconnexion utilise l'ID utilisateur extrait du token sécurisé plutôt que des données fournies par le client.
+- **Validation manuelle** : Les nouveaux comptes sont créés avec un statut "en attente" et nécessitent une approbation administrative avant tout accès.
 
-### A03:2021 - Injections
-- **Requêtes Paramétrées** : Utilisation systématique de `mysql2` avec des placeholders (`?`) pour toutes les requêtes SQL, empêchant les injections SQL.
-- **Validation des Entrées** : Les paramètres d'URL (`:id`, `:type`) et les corps de requêtes sont filtrés et validés avant traitement.
+### 2. Identification and Authentication (IA)
+- **Double Authentification (2FA)** : Système de code OTP envoyé par email à chaque tentative de connexion.
+- **Gestion des sessions** : Utilisation de tokens JWT avec expiration courte pour limiter la durée de validité des sessions.
+- **Hachage sécurisé** : Utilisation de `bcrypt` avec un sel de 10 rounds pour le stockage des mots de passe.
 
-### A05:2021 - Configuration de Sécurité Défaillante
-- **Helmet.js** : Protection des en-têtes HTTP (XSS Protection, HSTS, Clickjacking protection).
-- **CSP (Content Security Policy)** : Mise en place d'une politique stricte restreignant l'exécution de scripts et le chargement de ressources externes non autorisées.
-- **Masquage d'Erreurs** : Les erreurs serveur sont capturées globalement pour éviter d'exposer des stack traces ou des informations sensibles sur l'infrastructure.
+### 3. System Integrity (SI)
+- **Prévention des Injections SQL** : Utilisation systématique de requêtes préparées avec des "placeholders" via la bibliothèque `mysql2`.
+- **Validation des entrées** : Filtrage et validation des données reçues du client avant tout traitement en base de données.
+- **Protection XSS** : Nettoyage des données affichées dans l'interface React pour prévenir l'exécution de scripts malveillants.
 
-### A07:2021 - Échecs d'Identification et d'Authentification
-- **MFA (Multi-Factor Authentication)** : Authentification à deux facteurs via code OTP envoyé par email pour chaque connexion.
-- **Politique de Mot de Passe Forte** : Validation par Regex à l'inscription et à la réinitialisation (min 8 car, Maj, Min, Chiffre, Caractère spécial).
-- **Rate Limiting** : Limitation du nombre de tentatives de connexion (`express-rate-limit`) pour contrer les attaques par force brute.
-- **Email Enumeration Prevention** : Les messages d'erreur lors de la récupération de mot de passe sont génériques pour ne pas révéler l'existence d'un compte.
+### 4. Audit and Accountability (AU)
+- **Journalisation en temps réel** : Chaque action (Connexion, Déconnexion, Modification de compte, Suppression) est enregistrée dans une table `logs`.
+- **Traçabilité complète** : Les logs incluent l'ID de l'utilisateur, l'action effectuée, l'adresse IP et l'horodatage précis.
+- **Interface de supervision** : Une page "Journalisation" permet aux administrateurs de surveiller l'activité du système.
 
-### A08:2021 - Échecs d'Intégrité des Logiciels et des Données
-- **Validation des Uploads** : Filtrage strict par extension (`.xlsx`, `.xls`, `.csv`) et par type MIME pour les imports de fichiers.
-- **Limites de Taille** : Restriction de la taille des fichiers téléchargés pour prévenir les attaques par déni de service (DoS).
+### 5. Configuration Management (CM)
+- **En-têtes Helmet** : Utilisation du middleware `helmet` pour sécuriser les en-têtes HTTP (XSS Protection, Content Security Policy, etc.).
+- **Variables d'environnement** : Isolation des secrets (clés JWT, accès DB) dans un fichier `.env` non accessible publiquement.
 
-### A09:2021 - Manque de Journalisation et de Surveillance
-- **Logger d'Activités Avancé** : Chaque action de modification (POST, PUT, DELETE) est enregistrée avec l'ID utilisateur, l'action effectuée, l'URL et l'adresse IP de l'utilisateur.
-- **Logs de Connexion/Déconnexion** : Suivi précis des sessions utilisateurs.
+### 6. System and Communications Protection (SC)
+- **Chiffrement TLS** : Les communications sont sécurisées via le protocole HTTPS/TLS.
+- **Masquage d'erreurs** : Les erreurs serveur ne renvoient jamais de "stack trace" ou d'informations techniques sensibles au client.
 
 ---
-*Dernière mise à jour : 27 Avril 2026*
+
+## 🔍 Justifications Visuelles (Captures d'écran)
+
+#### Preuve NIST IA (Authentification)
+![Badge NIST IA sur le site](file:///C:/Users/hp/.gemini/antigravity/brain/b7a2f699-7331-49b1-8069-3239eb1786cc/nist_badge_login_1778150081655.png)
+
+#### Preuve NIST AU (Audit & Logs)
+Le système de journalisation enregistre chaque événement critique pour garantir la redevabilité.
+![Détails NIST IA Modal](file:///C:/Users/hp/.gemini/antigravity/brain/b7a2f699-7331-49b1-8069-3239eb1786cc/nist_modal_login_1778150149251.png)
+
+---
+*Mesures de sécurité inspirées du framework NIST.*
+

@@ -4,7 +4,9 @@ import autoTable from 'jspdf-autotable';
 import * as XLSX from 'xlsx';
 import { useLanguage } from '../../context/LanguageContext';
 import { ScrollText, FileSpreadsheet, FileText, FileDown, Search } from 'lucide-react';
+import SecurityBadge from '../../components/SecurityBadge/SecurityBadge';
 import './Journalisation.css';
+
 
 export default function Journalisation() {
   const { t, lang } = useLanguage();
@@ -160,7 +162,13 @@ export default function Journalisation() {
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <ScrollText size={28} color="#171B60" />
           <h2>{t('journal_acces')}</h2>
+          <SecurityBadge 
+            domain="AU (Audit)" 
+            risk="Absence de traçabilité des actions" 
+            mechanism="Système de logs temps réel enregistrant chaque action critique avec IP et timestamp." 
+          />
         </div>
+
         <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
           <button onClick={exporterExcel} className="btn-rouge" style={{ backgroundColor: '#62BB46', borderColor: '#62BB46', display: 'flex', alignItems: 'center', gap: '8px' }}>
             <FileSpreadsheet size={18} /> {t('export_excel')}

@@ -1,0 +1,139 @@
+.security-badge-container {
+  display: inline-block;
+  margin: 5px;
+}
+
+.security-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(98, 187, 70, 0.1);
+  border: 1px solid rgba(98, 187, 70, 0.3);
+  padding: 4px 12px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 12px;
+  font-weight: 600;
+  color: #1a8a4e;
+}
+
+.security-badge:hover {
+  background: rgba(98, 187, 70, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.info-icon {
+  opacity: 0.6;
+}
+
+.security-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  animation: fadeIn 0.3s ease;
+}
+
+.security-modal {
+  background: white;
+  width: 90%;
+  max-width: 400px;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+  animation: slideUp 0.3s ease;
+}
+
+.security-modal-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 20px;
+  background: #f8f9fa;
+  border-bottom: 1px solid #eee;
+}
+
+.security-modal-header h3 {
+  margin: 0;
+  flex: 1;
+  font-size: 18px;
+  color: #171b60;
+}
+
+.security-modal-header button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #999;
+}
+
+.security-modal-body {
+  padding: 24px;
+}
+
+.security-field {
+  margin-bottom: 20px;
+}
+
+.security-field strong {
+  display: block;
+  margin-bottom: 8px;
+  color: #333;
+  font-size: 14px;
+}
+
+.security-field p {
+  margin: 0;
+  color: #666;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.security-footer {
+  margin-top: 30px;
+  padding-top: 15px;
+  border-top: 1px dashed #ddd;
+  font-size: 11px;
+  color: #aaa;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* Dark mode compatibility */
+:global(.dark-mode) .security-modal {
+  background: #1e1e2d;
+  color: white;
+}
+:global(.dark-mode) .security-modal-header {
+  background: #252538;
+  border-bottom: 1px solid #333;
+}
+:global(.dark-mode) .security-modal-header h3 {
+  color: white;
+}
+:global(.dark-mode) .security-field strong {
+  color: #ddd;
+}
+:global(.dark-mode) .security-field p {
+  color: #bbb;
+}
