@@ -36,6 +36,27 @@ export default function Journalisation() {
     }
   };
 
+  const formatAction = (action) => {
+    if (!action) return '-';
+    
+    // Mapping des actions techniques vers des libellés lisibles
+    const lowerAction = action.toLowerCase();
+    
+    if (lowerAction === 'login') return t('connexion');
+    if (lowerAction === 'logout') return t('deconnexion');
+    if (lowerAction === 'timeout') return t('action_timeout');
+    if (lowerAction.includes('post sur /api/users')) return t('action_create_user');
+    if (lowerAction.includes('delete sur /api/users')) return t('action_delete_user');
+    if (lowerAction.includes('mise à jour d\'un utilisateur')) return t('action_approve_refuse');
+    if (lowerAction.includes('reset-password')) return t('action_reset_password');
+    if (lowerAction.includes('approuver')) return t('action_change_status');
+    if (lowerAction.includes('import')) return t('action_import');
+
+    
+    return action;
+  };
+
+
   const handleFilterChange = (e) => {
     setFilters({ ...filters, [e.target.name]: e.target.value });
   };
@@ -76,10 +97,7 @@ export default function Journalisation() {
 
     filteredLogs.forEach(log => {
       const date = new Date(log.cree_le).toLocaleString(lang === 'ar' ? 'ar-TN' : 'fr-FR');
-      let action = log.action;
-      if (log.action === 'login') action = t('connexion');
-      if (log.action === 'logout') action = t('deconnexion');
-      
+      const action = formatAction(log.action);
       const user = `${log.prenom} ${log.nom}`;
       tableRows.push([date, user, log.role.replace('_', ' '), action]);
     });
@@ -101,12 +119,8 @@ export default function Journalisation() {
 
     const rows = filteredLogs.map(log => {
       const date = new Date(log.cree_le).toLocaleString('fr-FR');
-      let action = log.action;
-      if (log.action === 'login') action = 'Connexion';
-      if (log.action === 'logout') action = 'Déconnexion';
-      
+      const action = formatAction(log.action);
       const user = `${log.prenom} ${log.nom}`;
-      // Échapper les guillemets et entourer de guillemets
       return `"${date}","${user}","${log.role.replace('_', ' ')}","${action}"`;
     });
 
@@ -127,10 +141,7 @@ export default function Journalisation() {
     const headers = ["Date et Heure", "Utilisateur", "Rôle", "Action"];
     const rows = filteredLogs.map(log => {
       const date = new Date(log.cree_le).toLocaleString('fr-FR');
-      let action = log.action;
-      if (log.action === 'login') action = 'Connexion';
-      if (log.action === 'logout') action = 'Déconnexion';
-
+      const action = formatAction(log.action);
       const user = `${log.prenom} ${log.nom}`;
       return [date, user, log.role.replace('_', ' '), action];
     });
@@ -218,7 +229,7 @@ export default function Journalisation() {
                   <td><span className={`badge badge-role ${log.role}`}>{log.role.replace('_', ' ')}</span></td>
                   <td>
                     <span className={`badge ${log.action === 'login' ? 'badge-vert' : (log.action === 'logout' ? 'badge-rouge' : 'badge-bleu')}`}>
-                      {log.action === 'login' ? t('connexion') : (log.action === 'logout' ? t('deconnexion') : log.action)}
+                      {formatAction(log.action)}
                     </span>
                   </td>
                 </tr>

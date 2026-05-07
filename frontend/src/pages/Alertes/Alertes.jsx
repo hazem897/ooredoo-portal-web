@@ -380,7 +380,7 @@ export default function Alertes() {
 
   if (loading) return (
     <div className="alertes-loading">
-      <div className="alertes-spinner" />
+      <div className="logo-loading" />
       <p>Chargement des alertes...</p>
     </div>
   );

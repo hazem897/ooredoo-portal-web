@@ -79,7 +79,7 @@ const sendAdminRegistrationAlert = async (userData) => {
                 </table>
             </div>
             <div style="text-align: center; margin-top: 30px;">
-                <a href="http://localhost:5173/utilisateurs" style="background-color: #E30613; color: white; padding: 12px 25px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block;">Gérer les demandes</a>
+                <a href="${process.env.BASE_URL || 'http://localhost:5173'}/utilisateurs" style="background-color: #E30613; color: white; padding: 12px 25px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block;">Gérer les demandes</a>
             </div>
         </div>
         <div style="background-color: #f4f4f4; padding: 15px; text-align: center;">
@@ -203,7 +203,7 @@ const sendStatusEmail = async (email, nom, prenom, statut) => {
         <p style="font-size: 16px; color: #666; line-height: 1.6;">${messageCorps}</p>
         ${statut === 'approuve' ? `
         <div style="margin-top: 30px;">
-          <a href="http://localhost:5173/login" style="display: inline-block; padding: 14px 30px; background-color: ${couleur}; color: #ffffff; text-decoration: none; border-radius: 30px; font-weight: bold; transition: opacity 0.2s;">Accéder au Portail</a>
+          <a href="${process.env.BASE_URL || 'http://localhost:5173'}/login" style="display: inline-block; padding: 14px 30px; background-color: ${couleur}; color: #ffffff; text-decoration: none; border-radius: 30px; font-weight: bold; transition: opacity 0.2s;">Accéder au Portail</a>
         </div>
         ` : ''}
       </div>
@@ -241,7 +241,7 @@ const sendAccountCreatedEmail = async (email, nom, prenom, password, role) => {
         </div>
 
         <div style="text-align: center; margin-top: 30px;">
-          <a href="https://discount-compare-buffing.ngrok-free.dev/login" style="display: inline-block; padding: 14px 30px; background-color: #E30613; color: #ffffff; text-decoration: none; border-radius: 30px; font-weight: bold;">Se connecter maintenant</a>
+          <a href="${process.env.BASE_URL || 'http://localhost:5173'}/login" style="display: inline-block; padding: 14px 30px; background-color: #E30613; color: #ffffff; text-decoration: none; border-radius: 30px; font-weight: bold;">Se connecter maintenant</a>
         </div>
         
         <p style="font-size: 13px; color: #999; margin-top: 30px; text-align: center; font-style: italic;">

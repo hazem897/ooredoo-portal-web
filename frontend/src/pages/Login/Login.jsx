@@ -51,6 +51,8 @@ export default function Login() {
       const res = await api.post('/auth/login', { email, mot_de_passe: mdp });
       setUserId(res.data.userId);
       setEtape(2);  // passer à l'étape OTP
+
+
     } catch (err) {
       setErreur(err.response?.data?.message || 'Erreur de connexion');
     }

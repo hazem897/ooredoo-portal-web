@@ -11,7 +11,11 @@ const db = require('./config/db');
 const app = express();
 
 // A02: Security Misconfiguration - Protection des en-têtes HTTP
-app.use(helmet());
+app.use(helmet({
+  crossOriginEmbedderPolicy: false,
+  contentSecurityPolicy: false, // On désactive temporairement pour test mobile
+}));
+
 
 // A06: Insecure Design - Rate Limiting Global
 const generalLimiter = rateLimit({

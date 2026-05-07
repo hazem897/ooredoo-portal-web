@@ -51,31 +51,28 @@ export default function PWAInstaller() {
         </button>
       )}
 
-      {/* Update/Offline Ready Toast */}
-      {(needRefresh || offlineReady) && (
+      {/* Update Toast (Removed Offline Ready Toast as requested) */}
+      {needRefresh && (
         <div className="pwa-toast">
           <div className="pwa-toast-content">
             <div className="pwa-toast-icon">
-              {needRefresh ? <RefreshCw className="anim-spin" size={20} /> : <CheckCircle2 size={20} color="#16A34A" />}
+              <RefreshCw className="anim-spin" size={20} />
             </div>
             <div className="pwa-toast-text">
-              {needRefresh 
-                ? 'Une mise à jour est disponible !' 
-                : 'L\'application est prête pour une utilisation hors ligne.'}
+              Une mise à jour est disponible !
             </div>
           </div>
           <div className="pwa-toast-actions">
-            {needRefresh && (
-              <button className="btn-update" onClick={updateApp}>
-                Mettre à jour
-              </button>
-            )}
+            <button className="btn-update" onClick={updateApp}>
+              Mettre à jour
+            </button>
             <button className="btn-close-toast" onClick={closeUpdateToast}>
               <X size={18} />
             </button>
           </div>
         </div>
       )}
+
 
       {/* iOS Install Modal */}
       {showIOSModal && (
