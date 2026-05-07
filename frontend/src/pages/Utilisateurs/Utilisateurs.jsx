@@ -3,8 +3,8 @@ import React, { useEffect, useState } from 'react';
 import api from '../../utils/api';
 import { useLanguage } from '../../context/LanguageContext';
 import { Key, CheckCircle, XCircle, Trash2, UserPlus, Check, X } from 'lucide-react';
-import SecurityBadge from '../../components/SecurityBadge/SecurityBadge';
 import './Utilisateurs.css';
+
 
 
 export default function Utilisateurs() {
@@ -109,14 +109,8 @@ export default function Utilisateurs() {
     <div className="utilisateurs-page">
       <div className="page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-            <h1>{t('gestion_utilisateurs')}</h1>
-            <SecurityBadge 
-              domain="AC (Contrôle d'accès)" 
-              risk="Accès non autorisés aux données sensibles" 
-              mechanism="Contrôle d'accès basé sur les rôles (RBAC) et système d'approbation manuelle des nouveaux comptes." 
-            />
-          </div>
+          <h1>{t('gestion_utilisateurs')}</h1>
+
 
           <p>{t('demandes_acces_desc')}</p>
         </div>

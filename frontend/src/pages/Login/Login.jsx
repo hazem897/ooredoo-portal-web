@@ -5,8 +5,8 @@ import { useAuth } from '../../context/AuthContext';
 import { useLanguage } from '../../context/LanguageContext';
 // Suppression import assets pour chemin public direct
 import api from '../../utils/api';
-import SecurityBadge from '../../components/SecurityBadge/SecurityBadge';
 import './Login.css';
+
 
 
 export default function Login() {
@@ -124,14 +124,8 @@ export default function Login() {
 
           {etape === 1 ? (
             <>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <h2>Connexion</h2>
-                <SecurityBadge 
-                  domain="IA (Authentification)" 
-                  risk="Vol de session ou brute-force" 
-                  mechanism="Authentification à deux facteurs (2FA) via code OTP unique envoyé par email." 
-                />
-              </div>
+              <h2>Connexion</h2>
+
 
               <p className="login-sous-titre">Accédez à votre espace de gestion</p>
 
