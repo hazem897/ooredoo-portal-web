@@ -9,7 +9,7 @@ const { sendOTPEmail, sendAdminRegistrationAlert } = require('../services/emailS
 exports.register = async (req, res) => {
   const { nom, prenom, email, mot_de_passe, role, zone } = req.body;
 
-  if (!['zone_manager', 'manager', 'conseiller'].includes(role)) {
+  if (!['zone_manager', 'manager'].includes(role)) {
     return res.status(400).json({ message: 'Rôle invalide' });
   }
 

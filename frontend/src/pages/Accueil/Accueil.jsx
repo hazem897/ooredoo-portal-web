@@ -95,7 +95,7 @@ export default function Accueil() {
         <div className="header-container">
           <div className="logo-section">
             <a href="#accueil" title="Retour à l'accueil">
-              <img src="/ooredoo_logo.png" alt="Ooredoo" className="nav-logo" />
+              <img src="/logo1.png" alt="Ooredoo" className="nav-logo" />
             </a>
           </div>
           <nav className="nav-links desktop-only">
@@ -123,7 +123,7 @@ export default function Accueil() {
       <section className="hero" id="accueil">
         <div className="hero-contenu">
           <div className="logo-hero">
-            <img src="/ooredoo_logo.png" alt="Ooredoo" style={{ height: '80px', borderRadius: '8px' }} />
+            <img src="/logo1.png" alt="Ooredoo" style={{ height: '80px', borderRadius: '8px' }} />
             <div>
               <p style={{ marginTop: '0', fontSize: '18px' }}>{t('portail_interne')}</p>
             </div>
@@ -224,7 +224,7 @@ export default function Accueil() {
         <div className="footer-grille">
           <div className="footer-col">
             <a href="#accueil" title="Retour en haut">
-              <img src="/ooredoo_logo.png" alt="Ooredoo" className="footer-logo" />
+              <img src="/logo1.png" alt="Ooredoo" className="footer-logo" />
             </a>
             <p>Portail Interne de Gestion Fix Jdid – Optimisez vos performances SLA.</p>
           </div>

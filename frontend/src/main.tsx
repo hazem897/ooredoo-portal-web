@@ -3,7 +3,7 @@ import App from "./App";
 import "./index.css";
 
 // Capture d'erreurs globale pour debug mobile
-window.onerror = function(msg, url, lineNo, columnNo, error) {
+window.onerror = function(msg, _url, lineNo, columnNo, _error) {
   const div = document.createElement('div');
   div.style.position = 'fixed';
   div.style.top = '0';
