@@ -5,7 +5,8 @@ import {
   AlertTriangle, 
   Download, 
   Bell, 
-  User 
+  User,
+  Home
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { usePWA } from '../../hooks/usePWA';
@@ -19,6 +20,11 @@ export default function MobileBottomNav() {
 
   return (
     <nav className="mobile-bottom-nav">
+      <NavLink to="/" end className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
+        <Home className="nav-icon" size={20} color="#E30613" />
+        <span className="nav-label">Accueil</span>
+      </NavLink>
+
       <NavLink to="/dashboard" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
         <LayoutDashboard className="nav-icon" size={20} color="#00BDF2" />
         <span className="nav-label">Stats</span>

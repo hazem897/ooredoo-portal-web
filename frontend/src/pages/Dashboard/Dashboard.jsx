@@ -7,7 +7,7 @@ import {
   RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, ComposedChart,
   AreaChart, Area
 } from 'recharts';
-import { Bell, LayoutDashboard, BarChart2, MapPin, CheckCircle, AlertCircle, XCircle } from 'lucide-react';
+import { Bell, LayoutDashboard, BarChart2, MapPin, CheckCircle, AlertCircle, XCircle, Home } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useLanguage } from '../../context/LanguageContext';
 import dashboardService from '../../services/dashboardService';
@@ -128,6 +128,16 @@ function Dashboard() {
           <p>Fix Jdid Ooredoo — {t('bienvenue')}
             {user?.zone && ` | Zone : ${user?.zone}`}
           </p>
+        </div>
+        <div className="dash-header-actions">
+          <button 
+            className="btn-site-public" 
+            onClick={() => navigate('/')}
+            title="Aller sur la page d'accueil publique"
+          >
+            <Home size={18} />
+            <span>Page d'accueil</span>
+          </button>
         </div>
       </div>
 

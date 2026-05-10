@@ -9,7 +9,8 @@ import {
   Smartphone, 
   Settings,
   LogOut,
-  User as UserIcon
+  User as UserIcon,
+  Home
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useLanguage } from '../../context/LanguageContext';
@@ -57,6 +58,15 @@ export default function Sidebar({ isOpen }) {
   return (
     <aside className={`sidebar ${isOpen ? 'open' : 'closed'}`}>
       <div className="sidebar-menu">
+        <NavLink
+          to="/"
+          end
+          className={({ isActive }) => isActive ? "sidebar-link active" : "sidebar-link"}
+        >
+          <Home className="icon" size={20} color="#E30613" />
+          <span>{t('accueil') || 'Accueil'}</span>
+        </NavLink>
+
         <NavLink
           to="/dashboard"
           className={({ isActive }) => isActive ? "sidebar-link active" : "sidebar-link"}

@@ -147,6 +147,39 @@ html {
   font-size: 18px;
 }
 
+/* Bouton Retour au Dashboard (quand connecté) - Style identique au bouton Page d'accueil */
+.btn-dashboard-retour {
+  background: white !important;
+  color: #E30613 !important;
+  border: 2px solid #E30613 !important;
+  box-shadow: 0 4px 10px rgba(227, 6, 19, 0.15) !important;
+  text-shadow: none !important;
+}
+
+.btn-dashboard-retour:hover {
+  background: #FFF0F0 !important;
+  transform: translateY(-3px) !important;
+  box-shadow: 0 8px 20px rgba(227, 6, 19, 0.25) !important;
+}
+
+.btn-dashboard-retour .user-icon svg {
+  color: #E30613 !important;
+}
+
+/* Version Hero du bouton Dashboard */
+.btn-dashboard-retour-hero {
+  background: white !important;
+  color: #E30613 !important;
+  border: 2px solid #E30613 !important;
+  box-shadow: 0 4px 15px rgba(227, 6, 19, 0.25) !important;
+}
+
+.btn-dashboard-retour-hero:hover {
+  background: #FFF0F0 !important;
+  transform: translateY(-3px) scale(1.05) !important;
+  box-shadow: 0 12px 25px rgba(227, 6, 19, 0.35) !important;
+}
+
 /* HERO */
 .hero {
   padding-top: 150px;
