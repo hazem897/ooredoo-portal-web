@@ -246,14 +246,7 @@ export default function Accueil() {
             </a>
             <p>Portail Interne de Gestion Fix Jdid – Optimisez vos performances SLA.</p>
           </div>
-          <div className="footer-col">
-            <h4>{t('support')}</h4>
-            <ul>
-              <li><Link to="#">{t('assistance')}</Link></li>
-              <li><Link to="#">{t('doc_api')}</Link></li>
-              <li><Link to="#">{t('etat_services')}</Link></li>
-            </ul>
-          </div>
+
           <div className="footer-col">
             <h4>Contact Officiel</h4>
             <ul>
