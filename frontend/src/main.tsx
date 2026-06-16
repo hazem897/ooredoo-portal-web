@@ -3,7 +3,7 @@ import App from "./App";
 import "./index.css";
 
 // Capture d'erreurs globale pour debug mobile
-window.onerror = function(msg, _url, lineNo, columnNo, _error) {
+window.onerror = function(msg, _url, lineNo, columnNo, error) {
   const div = document.createElement('div');
   div.style.position = 'fixed';
   div.style.top = '0';
@@ -14,11 +14,11 @@ window.onerror = function(msg, _url, lineNo, columnNo, _error) {
   div.style.padding = '10px';
   div.style.zIndex = '9999';
   div.style.fontSize = '12px';
-  div.innerText = 'Error: ' + msg + '\nLine: ' + lineNo + '\nCol: ' + columnNo;
+  div.innerText = 'Error: ' + msg + '\nLine: ' + lineNo + '\nCol: ' + columnNo + (error ? '\nDetails: ' + error : '');
   document.body.appendChild(div);
   return false;
 };
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <App />
-);
+);

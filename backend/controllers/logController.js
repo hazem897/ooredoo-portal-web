@@ -11,8 +11,11 @@ exports.getAllLogs = (req, res) => {
   `;
 
   db.query(query, (err, rows) => {
-    if (err) return res.status(500).json({ message: 'Erreur serveur SQL' });
-    res.json(rows);
+    if (err) {
+      console.error('[LOG CONTROLLER] Erreur getAllLogs:', err.message);
+      return res.status(500).json({ message: 'Erreur lors de la récupération des logs' });
+    }
+    res.json(rows || []);
   });
 };
 
@@ -26,7 +29,10 @@ exports.getUserLogs = (req, res) => {
   `;
 
   db.query(query, [req.params.id], (err, rows) => {
-    if (err) return res.status(500).json({ message: 'Erreur serveur SQL' });
-    res.json(rows);
+    if (err) {
+      console.error('[LOG CONTROLLER] Erreur getUserLogs:', err.message);
+      return res.status(500).json({ message: 'Erreur lors de la récupération des logs utilisateur' });
+    }
+    res.json(rows || []);
   });
 };

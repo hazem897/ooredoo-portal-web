@@ -1,9 +1,7 @@
 // frontend/src/pages/Login.js
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { useLanguage } from '../../context/LanguageContext';
-// Suppression import assets pour chemin public direct
 import api from '../../utils/api';
 import './Login.css';
 
@@ -22,6 +20,7 @@ export default function Login() {
   const [otp, setOtp] = useState('');
   const [erreur, setErreur] = useState('');
   const [chargement, setChargement] = useState(false);
+  const [devOtpCode, setDevOtpCode] = useState('');
 
   // Compteur OTP (120 secondes = 2 minutes)
   const [timeLeft, setTimeLeft] = useState(120);
@@ -32,10 +31,10 @@ export default function Login() {
       timer = setInterval(() => {
         setTimeLeft(prev => prev - 1);
       }, 1000);
-    } else if (timeLeft === 0) {
-      clearInterval(timer);
     }
-    return () => clearInterval(timer);
+    return () => {
+      if (timer) clearInterval(timer);
+    };
   }, [etape, timeLeft]);
 
   const formatTime = (seconds) => {
@@ -52,6 +51,11 @@ export default function Login() {
     try {
       const res = await api.post('/auth/login', { email, mot_de_passe: mdp });
       setUserId(res.data.userId);
+      if (res.data.devOtp) {
+        setDevOtpCode(res.data.devOtp);
+      } else {
+        setDevOtpCode('');
+      }
       setEtape(2);  // passer à l'étape OTP
 
 
@@ -62,7 +66,7 @@ export default function Login() {
   }
 
   // ÉTAPE 2 : Vérifier le code OTP
-  const verifyOTP = async (code = otp) => {
+  const verifyOTP = useCallback(async (code = otp) => {
     if (!code || code.length !== 6) return;
     setErreur('');
     setChargement(true);
@@ -75,14 +79,14 @@ export default function Login() {
       setOtp(''); // Réinitialiser le code en cas d'erreur pour permettre une nouvelle saisie
     }
     setChargement(false);
-  };
+  }, [userId, otp, connecter, navigate]);
 
   // Détection automatique du code OTP (Taille = 6)
   React.useEffect(() => {
     if (otp.length === 6 && etape === 2 && !chargement) {
       verifyOTP();
     }
-  }, [otp, etape]);
+  }, [otp, etape, chargement, verifyOTP]);
 
   async function handleOTP(e) {
     if (e) e.preventDefault();
@@ -194,6 +198,21 @@ export default function Login() {
                     required
                   />
                 </div>
+                {devOtpCode && (
+                  <div style={{
+                    padding: '12px',
+                    borderRadius: '8px',
+                    backgroundColor: '#FEF3C7',
+                    border: '1px solid #F59E0B',
+                    color: '#D97706',
+                    fontSize: '13px',
+                    fontWeight: 'bold',
+                    marginBottom: '15px',
+                    textAlign: 'center'
+                  }}>
+                    ⚠️ [Mode Dev] Code OTP : <span style={{ fontSize: '16px', letterSpacing: '2px', fontFamily: 'monospace', textDecoration: 'underline' }}>{devOtpCode}</span>
+                  </div>
+                )}
                 <button type="submit" className="btn-rouge" style={{ width: '100%' }} disabled={chargement || timeLeft === 0}>
                   {chargement ? 'Vérification...' : 'Valider le code'}
                 </button>

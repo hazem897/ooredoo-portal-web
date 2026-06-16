@@ -1,11 +1,28 @@
 // backend/services/emailService.js
 const transporter = require('../config/nodemailer');
 const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '../.env') });
 
 const LOGO_ATTACHMENT = {
   filename: 'logo.png',
   path: path.join(__dirname, '../assets/logo.png'),
   cid: 'logo'
+};
+
+// ✅ Fonction wrapper propre — évite de muter l'objet transporter partagé
+const sendMail = async (options) => {
+  if (process.env.DEV_MODE === 'true') {
+    console.log('\n=================== 📧 EMAIL (DEV MODE) ===================');
+    console.log(`De:       ${options.from}`);
+    console.log(`À:        ${options.to}`);
+    console.log(`Sujet:    ${options.subject}`);
+    console.log('------------------ Contenu HTML (Extrait) -----------------');
+    const plainText = options.html?.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim().substring(0, 300) || '';
+    console.log(plainText + '...');
+    console.log('===========================================================\n');
+    return { messageId: 'dev-mode-mock-id' };
+  }
+  return transporter.sendMail(options);
 };
 
 const sendOTPEmail = async (email, otp, type = 'login', userPrenom = '', passwordExample = '') => {
@@ -53,7 +70,7 @@ const sendOTPEmail = async (email, otp, type = 'login', userPrenom = '', passwor
     </div>
   `;
 
-  return transporter.sendMail({
+  return sendMail({
     from: process.env.EMAIL_FROM || `"Ooredoo Portal" <noreply@ooredoo.tn>`,
     to: email,
     subject,
@@ -88,7 +105,7 @@ const sendAdminRegistrationAlert = async (userData) => {
     </div>
   `;
 
-  return transporter.sendMail({
+  return sendMail({
     from: process.env.EMAIL_FROM || `"Système Ooredoo" <noreply@ooredoo.tn>`,
     to: process.env.ADMIN_EMAIL || 'yessingsm4@gmail.com',
     subject: '🔔 Nouvelle demande d\'inscription',
@@ -118,7 +135,7 @@ const sendDailyReportEmail = async (logs, attachments, today) => {
     </div>
   `;
 
-  return transporter.sendMail({
+  return sendMail({
     from: process.env.EMAIL_FROM || `"Système Ooredoo" <noreply@ooredoo.tn>`,
     to: process.env.ADMIN_EMAIL || 'yessingsm4@gmail.com',
     subject: `📊 Rapport d'Accès Ooredoo - ${today}`,
@@ -152,7 +169,7 @@ const sendNewPasswordEmail = async (email, newPassword, userPrenom) => {
     </div>
   `;
 
-  return transporter.sendMail({
+  return sendMail({
     from: process.env.EMAIL_FROM || `"Ooredoo Portal" <noreply@ooredoo.tn>`,
     to: email,
     subject: `🔐 Nouveau mot de passe Ooredoo`,
@@ -214,7 +231,7 @@ const sendStatusEmail = async (email, nom, prenom, statut) => {
     </div>
   `;
 
-  return transporter.sendMail({
+  return sendMail({
     from: process.env.EMAIL_FROM || `"Ooredoo Portal" <noreply@ooredoo.tn>`,
     to: email,
     subject: sujet,
@@ -254,7 +271,7 @@ const sendAccountCreatedEmail = async (email, nom, prenom, password, role) => {
     </div>
   `;
 
-  return transporter.sendMail({
+  return sendMail({
     from: process.env.EMAIL_FROM || `"Ooredoo Portal" <noreply@ooredoo.tn>`,
     to: email,
     subject: "🎉 Bienvenue sur votre nouveau compte Ooredoo Portal",
@@ -380,7 +397,7 @@ const sendAlertRelance = async ({ ticket, typeAlerte, messagePerso, expediteur, 
     </div>
   `;
 
-  return transporter.sendMail({
+  return sendMail({
     from: process.env.EMAIL_FROM || `"Ooredoo Alertes" <${process.env.EMAIL_USER}>`,
     to: destinataires.join(', '),
     replyTo: process.env.EMAIL_USER,
@@ -452,7 +469,7 @@ const sendAlertRelanceGroupe = async ({ tickets, typeAlerte, messagePerso, exped
     </div>
   `;
 
-  return transporter.sendMail({
+  return sendMail({
     from: process.env.EMAIL_FROM || `"Ooredoo Alertes" <${process.env.EMAIL_USER}>`,
     to: destinataires.join(', '),
     replyTo: process.env.EMAIL_USER,

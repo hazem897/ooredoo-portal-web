@@ -1,0 +1,10 @@
+[2026-06-03T12:13:08.114Z] DB: Fetching user from database...
+[2026-06-03T12:13:08.189Z] DB: ✅ User found: {"id":3,"email":"hazemhazem@gmail.com","statut":"approuve"}
+[2026-06-03T12:13:08.192Z] BCRYPT: Testing password verification...
+[2026-06-03T12:13:08.267Z] BCRYPT: ✅ Password matches {"provided":"Admin123456","storedHash":"$2a$10$9pza8gyNP0Kyi..."}
+[2026-06-03T12:13:08.267Z] API: Testing login endpoint...
+[2026-06-03T12:13:08.457Z] API: Status: 200
+[2026-06-03T12:13:08.457Z] API: ✅ Login successful: {"message":"Code OTP généré (mode dev)","userId":3,"devOtp":"804404"}
+[2026-06-03T12:13:08.457Z] OTP: Testing OTP verification with devOtp: "804404"
+[2026-06-03T12:13:08.468Z] OTP: Status: 200
+[2026-06-03T12:13:08.468Z] OTP: ✅ OTP verification successful: {"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6Ik...","user":{"id":3,"nom":"Hazem","prenom":"Hazem","role":"admin","zone":"Zone Test","email":"hazemhazem@gmail.com"}}

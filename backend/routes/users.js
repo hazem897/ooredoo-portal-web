@@ -20,7 +20,19 @@ const storage = multer.diskStorage({
     cb(null, `profile-${req.user.id}-${Date.now()}${path.extname(file.originalname)}`);
   }
 });
-const upload = multer({ storage });
+const upload = multer({
+  storage,
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB max
+  fileFilter: (req, file, cb) => {
+    const allowedTypes = /jpeg|jpg|png|gif|webp/;
+    const isValidMime = allowedTypes.test(file.mimetype);
+    const isValidExt = allowedTypes.test(path.extname(file.originalname).toLowerCase().slice(1));
+    if (!isValidMime || !isValidExt) {
+      return cb(new Error('Seules les images sont autorisées (JPEG, PNG, GIF, WEBP)'));
+    }
+    cb(null, true);
+  }
+});
 
 
 const userController = require('../controllers/userController');
@@ -29,8 +41,7 @@ const userController = require('../controllers/userController');
 // ROUTES UTILISATEURS
 // ──────────────────────────────────────────
 
-// GET /api/users - Liste tous les utilisateurs (Admin seulement)
-router.get('/', verifierToken, verifierRole('admin'), userController.getAllUsers);
+// ⚠️  ROUTES SPÉCIFIQUES D'ABORD (avant les routes paramétrées :id)
 
 // POST /api/users - Créer un utilisateur manuellement (Admin seulement)
 router.post('/', verifierToken, verifierRole('admin'), userController.creerUser);
@@ -38,11 +49,19 @@ router.post('/', verifierToken, verifierRole('admin'), userController.creerUser)
 // PUT /api/users/reset-password - Réinitialiser le mdp d'un user (Admin seulement)
 router.put('/reset-password', verifierToken, verifierRole('admin'), userController.reinitialiserMdp);
 
+// ⚠️  ROUTES GÉNÉRIQUES APRÈS
+
+// GET /api/users - Liste tous les utilisateurs (Admin seulement)
+router.get('/', verifierToken, verifierRole('admin'), userController.getAllUsers);
+
 // PUT /api/users/:id/approuver - Approuver/Refuser un user (Admin seulement)
 router.put('/:id/approuver', verifierToken, verifierRole('admin'), userController.approuverUser);
 
-// DELETE /api/users/:id - Supprimer un user (Admin seulement)
-router.delete('/:id', verifierToken, verifierRole('admin'), userController.supprimerUser);
+// PUT /api/users/:id/password - Changer mdp
+router.put('/:id/password', verifierToken, userController.changerMotDePasse);
+
+// POST /api/users/:id/photo - Upload photo
+router.post('/:id/photo', verifierToken, upload.single('photo'), userController.uploadPhoto);
 
 // GET /api/users/:id - Profil utilisateur
 router.get('/:id', verifierToken, userController.getProfil);
@@ -50,10 +69,7 @@ router.get('/:id', verifierToken, userController.getProfil);
 // PUT /api/users/:id - Modifier infos profil
 router.put('/:id', verifierToken, userController.modifierProfil);
 
-// PUT /api/users/:id/password - Changer mdp
-router.put('/:id/password', verifierToken, userController.changerMotDePasse);
-
-// POST /api/users/:id/photo - Upload photo
-router.post('/:id/photo', verifierToken, upload.single('photo'), userController.uploadPhoto);
+// DELETE /api/users/:id - Supprimer un user (Admin seulement)
+router.delete('/:id', verifierToken, verifierRole('admin'), userController.supprimerUser);
 
 module.exports = router;

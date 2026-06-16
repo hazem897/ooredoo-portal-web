@@ -26,26 +26,53 @@ exports.approuverUser = (req, res) => {
   }
 
   db.query('SELECT nom, prenom, email FROM users WHERE id = ?', [req.params.id], (err, rows) => {
-    if (err || rows.length === 0) return res.status(404).json({ message: 'User non trouvé' });
+    if (err) {
+      console.error('[USER CONTROLLER] Erreur SELECT user:', err.message);
+      return res.status(500).json({ message: 'Erreur serveur' });
+    }
+    if (!rows || rows.length === 0) {
+      return res.status(404).json({ message: 'Utilisateur non trouvé' });
+    }
+    
     const user = rows[0];
 
     db.query('UPDATE users SET statut = ? WHERE id = ?', [statut, req.params.id], (updErr) => {
-      if (updErr) return res.status(500).json({ message: 'Erreur serveur' });
-      emailService.sendStatusEmail(user.email, user.nom, user.prenom, statut);
-      res.json({ message: `Utilisateur ${statut}` });
+      if (updErr) {
+        console.error('[USER CONTROLLER] Erreur UPDATE statut:', updErr.message);
+        return res.status(500).json({ message: 'Erreur lors de la mise à jour du statut' });
+      }
+      try {
+        emailService.sendStatusEmail(user.email, user.nom, user.prenom, statut);
+      } catch (mailErr) {
+        console.error('[USER CONTROLLER] Erreur envoi email notification:', mailErr.message);
+      }
+      res.json({ message: `Utilisateur ${statut} avec succès` });
     });
   });
 };
 
 exports.supprimerUser = (req, res) => {
   db.query('SELECT nom, prenom, email FROM users WHERE id = ?', [req.params.id], (err, rows) => {
-    if (err || rows.length === 0) return res.status(404).json({ message: 'User non trouvé' });
+    if (err) {
+      console.error('[USER CONTROLLER] Erreur SELECT user:', err.message);
+      return res.status(500).json({ message: 'Erreur serveur' });
+    }
+    if (!rows || rows.length === 0) {
+      return res.status(404).json({ message: 'Utilisateur non trouvé' });
+    }
     const user = rows[0];
 
     db.query('DELETE FROM users WHERE id = ?', [req.params.id], (delErr) => {
-      if (delErr) return res.status(500).json({ message: 'Erreur serveur' });
-      emailService.sendStatusEmail(user.email, user.nom, user.prenom, 'supprime');
-      res.json({ message: 'Utilisateur supprimé et notifié par email' });
+      if (delErr) {
+        console.error('[USER CONTROLLER] Erreur DELETE user:', delErr.message);
+        return res.status(500).json({ message: 'Erreur lors de la suppression' });
+      }
+      try {
+        emailService.sendStatusEmail(user.email, user.nom, user.prenom, 'supprime');
+      } catch (mailErr) {
+        console.error('[USER CONTROLLER] Erreur envoi email suppression:', mailErr.message);
+      }
+      res.json({ message: 'Utilisateur supprimé avec succès' });
     });
   });
 };
@@ -59,7 +86,13 @@ exports.getProfil = (req, res) => {
     'SELECT id, nom, prenom, email, role, zone, statut, photo_url, cree_le FROM users WHERE id = ?',
     [req.params.id],
     (err, rows) => {
-      if (err || rows.length === 0) return res.status(404).json({ message: 'Utilisateur non trouvé' });
+      if (err) {
+        console.error('[USER CONTROLLER] Erreur SELECT profil:', err.message);
+        return res.status(500).json({ message: 'Erreur lors de la récupération du profil' });
+      }
+      if (!rows || rows.length === 0) {
+        return res.status(404).json({ message: 'Utilisateur non trouvé' });
+      }
       res.json(rows[0]);
     }
   );
@@ -71,12 +104,20 @@ exports.modifierProfil = (req, res) => {
   }
 
   const { nom, prenom, email, zone } = req.body;
+  
+  if (!nom || !prenom || !email) {
+    return res.status(400).json({ message: 'Champs obligatoires manquants' });
+  }
+
   db.query(
     'UPDATE users SET nom = ?, prenom = ?, email = ?, zone = ? WHERE id = ?',
     [nom, prenom, email, zone, req.params.id],
     (err) => {
-      if (err) return res.status(500).json({ message: 'Erreur SQL' });
-      res.json({ message: 'Profil mis à jour' });
+      if (err) {
+        console.error('[USER CONTROLLER] Erreur mise à jour profil:', err.message);
+        return res.status(500).json({ message: 'Erreur lors de la mise à jour du profil' });
+      }
+      res.json({ message: 'Profil mis à jour avec succès' });
     }
   );
 };
@@ -87,12 +128,50 @@ exports.changerMotDePasse = async (req, res) => {
   }
 
   const { password } = req.body;
-  const hash = await bcrypt.hash(password, 10);
+  
+  // ✅ Validation: Longueur minimum
+  if (!password || password.length < 8) {
+    return res.status(400).json({ 
+      message: 'Le mot de passe doit contenir au moins 8 caractères' 
+    });
+  }
 
-  db.query('UPDATE users SET mot_de_passe = ? WHERE id = ?', [hash, req.params.id], (err) => {
-    if (err) return res.status(500).json({ message: 'Erreur SQL' });
-    res.json({ message: 'Mot de passe modifié' });
-  });
+  // ✅ Validation: Au moins une majuscule
+  if (!/[A-Z]/.test(password)) {
+    return res.status(400).json({ 
+      message: 'Le mot de passe doit contenir au moins une majuscule' 
+    });
+  }
+
+  // ✅ Validation: Au moins un chiffre
+  if (!/[0-9]/.test(password)) {
+    return res.status(400).json({ 
+      message: 'Le mot de passe doit contenir au moins un chiffre' 
+    });
+  }
+
+  // ✅ Validation: Au moins un caractère spécial
+  if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+    return res.status(400).json({ 
+      message: 'Le mot de passe doit contenir au moins un caractère spécial (!@#$%^&*)' 
+    });
+  }
+
+  try {
+    const hash = await bcrypt.hash(password, 10);
+
+    db.query('UPDATE users SET mot_de_passe = ? WHERE id = ?', [hash, req.params.id], (err) => {
+      if (err) {
+        console.error('[USER CONTROLLER] Erreur UPDATE mot_de_passe:', err.message);
+        return res.status(500).json({ message: 'Erreur lors du changement de mot de passe' });
+      }
+      console.log(`[USER CONTROLLER] ✅ Mot de passe changé pour user id: ${req.params.id}`);
+      res.json({ message: 'Mot de passe modifié avec succès' });
+    });
+  } catch (hashErr) {
+    console.error('[USER CONTROLLER] Erreur bcrypt:', hashErr.message);
+    res.status(500).json({ message: 'Erreur lors du hashage du mot de passe' });
+  }
 };
 
 exports.uploadPhoto = (req, res) => {
@@ -100,12 +179,17 @@ exports.uploadPhoto = (req, res) => {
     return res.status(403).json({ message: 'Accès refusé' });
   }
 
-  if (!req.file) return res.status(400).json({ message: 'Aucun fichier reçu' });
+  if (!req.file) {
+    return res.status(400).json({ message: 'Aucun fichier image fourni' });
+  }
 
   const photoUrl = `/uploads/profiles/${req.file.filename}`;
   db.query('UPDATE users SET photo_url = ? WHERE id = ?', [photoUrl, req.params.id], (err) => {
-    if (err) return res.status(500).json({ message: 'Erreur SQL' });
-    res.json({ photoUrl, message: 'Photo mise à jour' });
+    if (err) {
+      console.error('[USER CONTROLLER] Erreur UPDATE photo:', err.message);
+      return res.status(500).json({ message: 'Erreur lors de la mise à jour de la photo' });
+    }
+    res.json({ photoUrl, message: 'Photo de profil mise à jour avec succès' });
   });
 };
 
@@ -116,35 +200,49 @@ exports.creerUser = async (req, res) => {
     return res.status(400).json({ message: 'Tous les champs sont obligatoires' });
   }
 
+  if (!['admin', 'zone_manager', 'manager', 'conseiller'].includes(role)) {
+    return res.status(400).json({ message: 'Rôle invalide' });
+  }
+
   try {
     // Vérifier si l'email existe déjà
     db.query('SELECT id FROM users WHERE email = ?', [email], async (err, rows) => {
-      if (err) return res.status(500).json({ message: 'Erreur SQL' });
-      if (rows.length > 0) return res.status(400).json({ message: 'Cet email est déjà utilisé' });
+      if (err) {
+        console.error('[USER CONTROLLER] Erreur SELECT email:', err.message);
+        return res.status(500).json({ message: 'Erreur lors de la vérification de l\'email' });
+      }
+      if (rows && rows.length > 0) {
+        return res.status(400).json({ message: 'Cet email est déjà utilisé' });
+      }
 
-      const hash = await bcrypt.hash(password, 10);
+      try {
+        const hash = await bcrypt.hash(password, 10);
 
-      db.query(
-        'INSERT INTO users (nom, prenom, email, mot_de_passe, role, statut) VALUES (?, ?, ?, ?, ?, "approuve")',
-        [nom, prenom, email, hash, role],
-        async (insErr, result) => {
-          if (insErr) {
-            console.error(insErr);
-            return res.status(500).json({ message: 'Erreur lors de la création' });
+        db.query(
+          'INSERT INTO users (nom, prenom, email, mot_de_passe, role, statut) VALUES (?, ?, ?, ?, ?, "approuve")',
+          [nom, prenom, email, hash, role],
+          async (insErr, result) => {
+            if (insErr) {
+              console.error('[USER CONTROLLER] Erreur INSERT user:', insErr.message);
+              return res.status(500).json({ message: 'Erreur lors de la création de l\'utilisateur' });
+            }
+
+            // Envoyer l'email de bienvenue avec les identifiants
+            try {
+              console.log(`📧 Envoi de l'e-mail de bienvenue à ${email}...`);
+              await emailService.sendAccountCreatedEmail(email, nom, prenom, password, role);
+              console.log("✅ E-mail envoyé avec succès");
+              res.json({ message: 'Utilisateur créé avec succès et e-mail envoyé !' });
+            } catch (mailErr) {
+              console.error("❌ Erreur e-mail détails:", mailErr);
+              res.json({ message: 'Utilisateur créé, mais l\'e-mail n\'a pas pu être envoyé. (Vérifiez la config SMTP)' });
+            }
           }
-
-          // Envoyer l'email de bienvenue avec les identifiants
-          try {
-            console.log(`📧 Envoi de l'e-mail de bienvenue à ${email}...`);
-            await emailService.sendAccountCreatedEmail(email, nom, prenom, password, role);
-            console.log("✅ E-mail envoyé avec succès");
-            res.json({ message: 'Utilisateur créé avec succès et e-mail envoyé !' });
-          } catch (mailErr) {
-            console.error("❌ Erreur e-mail détails:", mailErr);
-            res.json({ message: 'Utilisateur créé, mais l\'e-mail n\'a pas pu être envoyé. (Vérifiez la config SMTP)' });
-          }
-        }
-      );
+        );
+      } catch (hashErr) {
+        console.error('[USER CONTROLLER] Erreur hash:', hashErr.message);
+        return res.status(500).json({ message: 'Erreur lors de la création de l\'utilisateur' });
+      }
     });
   } catch (e) {
     console.error("❌ Erreur critique serveur:", e);

@@ -1,5 +1,6 @@
 // frontend/src/context/AuthContext.js
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import api from '../utils/api';
 
 const AuthContext = createContext();
 
@@ -49,11 +50,7 @@ export function AuthProvider({ children }) {
   async function deconnecter(reason = 'logout') {
     if (user) {
       try {
-        await fetch('/api/auth/logout', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ userId: user.id, reason })
-        });
+        await api.post('/auth/logout', { userId: user.id, reason });
       } catch (err) {
         console.error('Erreur lors du log de déconnexion', err);
       }

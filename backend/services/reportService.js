@@ -69,7 +69,7 @@ const generateAndSendDailyReports = async () => {
         SELECT l.id, l.action, l.cree_le, u.nom, u.prenom, u.role, u.email
         FROM access_logs l
         JOIN users u ON l.user_id = u.id
-        WHERE DATE(l.cree_le) = CURDATE()
+        WHERE l.cree_le::date = CURRENT_DATE
         ORDER BY l.cree_le DESC
     `;
 

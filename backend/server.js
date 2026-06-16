@@ -35,9 +35,10 @@ app.use('/api/auth/login', authLimiter);
 app.use('/api/auth/forgot-password', authLimiter);
 app.use('/api/auth/verify-reset-otp', authLimiter);
 
-// Middleware
+// ✅ Middleware
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ limit: '10mb', extended: true }));
 
 // Logger d'activités (actions des utilisateurs)
 app.use(require('./middleware/logger'));
@@ -56,42 +57,79 @@ app.use('/api/tickets', require('./routes/tickets'));
 // Initialisation des tâches planifiées (Cron)
 cronScheduler.init();
 
-// Route de test
-app.get('/api/health', (req, res) => res.json({ status: 'OK', message: 'Serveur Ooredoo actif' }));
-
-// Gestion globale des erreurs (évite le crash du serveur)
-app.use((err, req, res, next) => {
-  console.error('Erreur non gérée:', err.message);
-  res.status(500).json({ message: 'Erreur interne du serveur' });
+// ✅ Health check route
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'OK', message: 'Serveur Ooredoo actif', timestamp: new Date() });
 });
 
-// Capture des erreurs asynchrones non gérées (évite le crash)
+// ✅ ERREUR: Global error handler (404 + 500)
+app.use((req, res, next) => {
+  res.status(404).json({ message: 'Route non trouvée', path: req.path });
+});
+
+app.use((err, req, res, next) => {
+  console.error('❌ Erreur non gérée:', {
+    message: err.message,
+    stack: err.stack,
+    url: req.originalUrl,
+    method: req.method,
+  });
+  res.status(500).json({
+    message: 'Erreur interne du serveur',
+    error: process.env.DEV_MODE === 'true' ? err.message : undefined,
+  });
+});
+
+// ✅ HANDLE: Exceptions asynchrones non gérées
 process.on('uncaughtException', (err) => {
   console.error('❌ Exception non capturée:', err.message);
-  // Ne pas quitter le processus
+  console.error(err.stack);
+  // Ne pas quitter le processus (production)
 });
 
-process.on('unhandledRejection', (reason) => {
+process.on('unhandledRejection', (reason, promise) => {
   console.error('❌ Promesse rejetée non gérée:', reason);
-  // Ne pas quitter le processus
+  console.error('Promise:', promise);
+  // Ne pas quitter le processus (production)
 });
 
+// ✅ Démarrage du serveur
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`🚀 Serveur démarré sur le port ${PORT}`);
-  // Log du démarrage
-  db.query('INSERT INTO access_logs (user_id, action) VALUES (1, "login")');
-});
 
-// LOG ARRÊT DU SERVEUR
-function logStopAndExit() {
-  console.log('🛑 Arrêt du serveur...');
-  db.query('INSERT INTO access_logs (user_id, action) VALUES (1, "logout")', () => {
-    process.exit(0);
-  });
-  // Sécurité si la DB ne répond pas
-  setTimeout(() => process.exit(0), 1000);
+// ⚠️ VALIDATION: Vérifier les variables d'environnement critiques
+if (!process.env.JWT_SECRET) {
+  console.error('❌ ERREUR CRITIQUE: JWT_SECRET non défini dans .env');
+  process.exit(1);
 }
 
-process.on('SIGINT', logStopAndExit);
-process.on('SIGTERM', logStopAndExit);
+if (!process.env.DB_HOST || !process.env.DB_USER || !process.env.DB_PASSWORD || !process.env.DB_NAME) {
+  console.error('❌ ERREUR CRITIQUE: Configuration base de données incomplète');
+  process.exit(1);
+}
+
+const server = app.listen(PORT, () => {
+  console.log(`🚀 Serveur démarré sur le port ${PORT}`);
+  console.log(`✅ Connecté à PostgreSQL`);
+  if (process.env.DEV_MODE === 'true') {
+    console.log(`⚠️  MODE DEV ACTIVÉ - OTP affichés sur frontend`);
+  }
+});
+
+// ✅ SHUTDOWN: Graceful shutdown
+function gracefulShutdown() {
+  console.log('\n🛑 Arrêt gracieux du serveur...');
+  server.close(() => {
+    console.log('✅ Serveur fermé');
+    db.pool?.end?.();
+    process.exit(0);
+  });
+  
+  // Force quit après 10 secondes
+  setTimeout(() => {
+    console.error('⚠️  Forçage de l\'arrêt après 10 secondes');
+    process.exit(1);
+  }, 10000);
+}
+
+process.on('SIGINT', gracefulShutdown);
+process.on('SIGTERM', gracefulShutdown);

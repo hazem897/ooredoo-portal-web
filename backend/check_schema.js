@@ -1,6 +1,6 @@
-const db = require('./config/db');
+import { query } from './config/db';
 
-db.query('DESCRIBE tickets', (err, rows) => {
+query("SELECT column_name, data_type, is_nullable, column_default FROM information_schema.columns WHERE table_name = 'tickets' ORDER BY ordinal_position", (err, rows) => {
   if (err) {
     console.error('Error describing tickets:', err.message);
     process.exit(1);

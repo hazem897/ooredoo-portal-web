@@ -1,11 +1,11 @@
 const db = require('./config/db');
 
-db.query('SHOW TABLES', (err, rows) => {
+db.query("SELECT tablename FROM pg_tables WHERE schemaname = 'public'", (err, rows) => {
   if (err) {
     console.error('Error fetching tables:', err.message);
     process.exit(1);
   }
-  console.log('Tables in database:', rows);
+  console.log('Tables in database:', rows.map((row) => row.tablename));
   
   db.query('SELECT COUNT(*) as count FROM tickets', (err, rows) => {
     if (err) {

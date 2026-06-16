@@ -1,23 +1,29 @@
 // frontend/src/utils/api.js
 import axios from 'axios';
 
-// Instance axios avec base URL
+// ✅ Instance axios avec base URL
 const api = axios.create({
-  baseURL: '/api'
+  baseURL: '/api',
+  timeout: 10000,
 });
 
-// Ajouter le token JWT automatiquement à chaque requête
+// ✅ Interceptor REQUEST: Ajoute le JWT token automatiquement
 api.interceptors.request.use((config) => {
   const token = sessionStorage.getItem('token');
-  if (token) config.headers.Authorization = `Bearer ${token}`;
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
   return config;
 });
 
-// Si token expiré, rediriger vers login
+// ✅ Interceptor RESPONSE: Gère les erreurs 401
 api.interceptors.response.use(
   (response) => response,
   (error) => {
+    console.error('[API ERROR]', error.response?.status, error.response?.data?.message);
+    
     if (error.response?.status === 401) {
+      console.warn('[API] Token expiré ou invalide - Redirecting to login');
       sessionStorage.removeItem('token');
       sessionStorage.removeItem('user');
       window.location.href = '/login';

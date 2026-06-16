@@ -22,13 +22,13 @@ exports.getAlertes = async (req, res) => {
       SELECT t.id, t.client_nom, t.client_tel, t.zone, t.produit, t.debit,
              t.statut, t.date_creation, t.date_prise_rdv, t.crm_case,
              t.statut_gel, t.nb_relances, t.derniere_relance, t.type_ticket,
-             TIMESTAMPDIFF(HOUR, t.date_creation, NOW()) AS heures_ecoulees
+             EXTRACT(EPOCH FROM (NOW() - t.date_creation))::integer / 3600 AS heures_ecoulees
       FROM tickets t
       WHERE t.type_ticket = 'activation'
         AND t.statut NOT IN ('resolu', 'ferme')
         AND (
-          (t.date_prise_rdv IS NULL AND t.date_creation <= NOW() - INTERVAL 48 HOUR)
-          OR (t.statut = 'en_cours' AND t.date_creation <= NOW() - INTERVAL 72 HOUR)
+          (t.date_prise_rdv IS NULL AND t.date_creation <= NOW() - INTERVAL '48 hours')
+          OR (t.statut = 'en_cours' AND t.date_creation <= NOW() - INTERVAL '72 hours')
           OR (t.statut_gel = 'oui')
         )
         ${zoneWhere}
@@ -39,11 +39,11 @@ exports.getAlertes = async (req, res) => {
       SELECT t.id, t.client_nom, t.client_tel, t.zone, t.produit, t.debit,
              t.statut, t.date_creation, t.date_prise_rdv, t.crm_case,
              t.statut_gel, t.nb_relances, t.derniere_relance, t.type_ticket,
-             TIMESTAMPDIFF(HOUR, t.date_creation, NOW()) AS heures_ecoulees
+             EXTRACT(EPOCH FROM (NOW() - t.date_creation))::integer / 3600 AS heures_ecoulees
       FROM tickets t
       WHERE t.type_ticket = 'resiliation'
         AND t.statut NOT IN ('resolu', 'ferme')
-        AND t.date_creation <= NOW() - INTERVAL 48 HOUR
+        AND t.date_creation <= NOW() - INTERVAL '48 hours'
         ${zoneWhere}
       ORDER BY heures_ecoulees DESC
     `, [...zoneParam]);
@@ -52,11 +52,11 @@ exports.getAlertes = async (req, res) => {
       SELECT t.id, t.client_nom, t.client_tel, t.zone, t.produit, t.debit,
              t.statut, t.date_creation, t.date_prise_rdv, t.crm_case,
              t.statut_gel, t.nb_relances, t.derniere_relance, t.type_ticket,
-             TIMESTAMPDIFF(HOUR, t.date_creation, NOW()) AS heures_ecoulees
+             EXTRACT(EPOCH FROM (NOW() - t.date_creation))::integer / 3600 AS heures_ecoulees
       FROM tickets t
       WHERE t.type_ticket = 'plainte'
         AND t.statut NOT IN ('resolu', 'ferme')
-        AND t.date_creation <= NOW() - INTERVAL 48 HOUR
+        AND t.date_creation <= NOW() - INTERVAL '48 hours'
         ${zoneWhere}
       ORDER BY heures_ecoulees DESC
     `, [...zoneParam]);

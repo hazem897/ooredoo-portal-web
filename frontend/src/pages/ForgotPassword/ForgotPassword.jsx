@@ -11,6 +11,7 @@ export default function ForgotPassword() {
   const [step, setStep] = useState(1); // 1: Email, 2: Code, 3: Password
   const [msg, setMsg] = useState({ type: '', text: '' });
   const [chargement, setChargement] = useState(false);
+  const [devOtpCode, setDevOtpCode] = useState('');
 
   // Évaluation de la force du mot de passe (0-5)
   const evaluerForce = (pwd) => {
@@ -43,6 +44,11 @@ export default function ForgotPassword() {
     try {
       const res = await api.post('/auth/forgot-password', { email: email.trim().toLowerCase() });
       setStep(2);
+      if (res.data.devOtp) {
+        setDevOtpCode(res.data.devOtp);
+      } else {
+        setDevOtpCode('');
+      }
       setMsg({ type: 'success', text: res.data.message });
     } catch (err) {
       setMsg({ type: 'error', text: err.response?.data?.message || 'Erreur lors de l\'envoi.' });
@@ -167,6 +173,21 @@ export default function ForgotPassword() {
                     required 
                   />
                 </div>
+                {devOtpCode && (
+                  <div style={{
+                    padding: '12px',
+                    borderRadius: '8px',
+                    backgroundColor: '#FEF3C7',
+                    border: '1px solid #F59E0B',
+                    color: '#D97706',
+                    fontSize: '13px',
+                    fontWeight: 'bold',
+                    marginBottom: '15px',
+                    textAlign: 'center'
+                  }}>
+                    ⚠️ [Mode Dev] Code OTP : <span style={{ fontSize: '16px', letterSpacing: '2px', fontFamily: 'monospace', textDecoration: 'underline' }}>{devOtpCode}</span>
+                  </div>
+                )}
                 <button type="submit" className="btn-rouge" style={{ width: '100%', height: '50px', fontSize: '16px' }} disabled={chargement}>
                   {chargement ? 'Vérification...' : 'Vérifier l\'identité'}
                 </button>
